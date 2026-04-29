@@ -46,12 +46,24 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
   })
   const [refPhotos, setRefPhotos] = useState<File[]>([])
   const [zonePhoto, setZonePhoto] = useState<File | null>(null)
+  const [errors, setErrors] = useState<{ email?: string; phone?: string }>({})
   const refInputRef = useRef<HTMLInputElement>(null)
   const zoneInputRef = useRef<HTMLInputElement>(null)
 
   const set = (patch: Partial<FormData>) => setForm(prev => ({ ...prev, ...patch }))
   const selectedZone = bodyZones.find(z => z.id === form.zone)
   const minDate = getMinDate()
+
+  const validateContact = (): boolean => {
+    const newErrors: { email?: string; phone?: string } = {}
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
+    if (!emailOk) newErrors.email = tr.form.emailError
+    if (form.phone.trim() && !/^[0-9\s\+\-\(\)]{7,20}$/.test(form.phone.trim())) {
+      newErrors.phone = tr.form.phoneError
+    }
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
 
   const handleRefPhotos = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
@@ -418,8 +430,12 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 type="email"
                 required
                 value={form.email}
-                onChange={e => set({ email: e.target.value })}
+                style={{ borderBottomColor: errors.email ? '#c0392b' : undefined }}
+                onChange={e => { set({ email: e.target.value }); setErrors(prev => ({ ...prev, email: undefined })) }}
               />
+              {errors.email && (
+                <p style={{ fontSize: '11px', color: '#c0392b', marginTop: '6px', letterSpacing: '0.02em' }}>{errors.email}</p>
+              )}
             </div>
           </div>
           <div className="ls-form-group">
@@ -427,8 +443,12 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
             <input
               type="tel"
               value={form.phone}
-              onChange={e => set({ phone: e.target.value })}
+              style={{ borderBottomColor: errors.phone ? '#c0392b' : undefined }}
+              onChange={e => { set({ phone: e.target.value }); setErrors(prev => ({ ...prev, phone: undefined })) }}
             />
+            {errors.phone && (
+              <p style={{ fontSize: '11px', color: '#c0392b', marginTop: '6px', letterSpacing: '0.02em' }}>{errors.phone}</p>
+            )}
           </div>
           <div style={{ display: 'flex', gap: '12px' }}>
             <button type="button" className="ls-btn-outline" onClick={() => setStep(2)}>{tr.form.back}</button>
@@ -437,7 +457,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               className="ls-btn-primary"
               style={{ flex: 1, justifyContent: 'center' }}
               disabled={!form.name.trim() || !form.email.trim()}
-              onClick={handleSubmit}
+              onClick={() => { if (validateContact()) handleSubmit() }}
             >
               {tr.form.submit}
             </button>
