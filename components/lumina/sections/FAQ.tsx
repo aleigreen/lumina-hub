@@ -2,14 +2,18 @@
 
 import { useState } from 'react'
 import { faqs } from '../data/faqs'
+import { t, type Locale } from '../data/translations'
 
-export default function FAQ() {
+type Props = { locale: Locale }
+
+export default function FAQ({ locale }: Props) {
   const [open, setOpen] = useState<number | null>(null)
+  const tr = t[locale].faq
 
   return (
     <section className="ls-section" id="faq">
-      <div className="ls-section-label">What you need to know</div>
-      <h2 className="ls-section-title" style={{ marginBottom: '40px' }}>FAQ</h2>
+      <div className="ls-section-label">{tr.label}</div>
+      <h2 className="ls-section-title" style={{ marginBottom: '40px' }}>{tr.title}</h2>
       <div style={{ maxWidth: '760px' }}>
         {faqs.map((faq, i) => (
           <div key={i} className="ls-faq-item">

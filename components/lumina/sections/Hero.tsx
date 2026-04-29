@@ -1,13 +1,18 @@
-export default function Hero() {
+import { t, type Locale } from '../data/translations'
+
+type Props = { locale: Locale }
+
+export default function Hero({ locale }: Props) {
+  const tr = t[locale].hero
   return (
     <section className="ls-hero">
-      <div className="ls-hero-eyebrow">Tattoo Studio · Condesa, Mexico City</div>
+      <div className="ls-hero-eyebrow">{tr.eyebrow}</div>
       <h1 className="ls-hero-title">LUMINA</h1>
-      <div className="ls-hero-subtitle">Sanctum</div>
-      <div className="ls-hero-location">Only by appointment</div>
+      <div className="ls-hero-subtitle">{tr.subtitle}</div>
+      <div className="ls-hero-location">{tr.location}</div>
       <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-        <a href="#book" className="ls-btn-primary">Book a session →</a>
-        <a href="#artists" className="ls-btn-outline">Meet the artists</a>
+        <a href="#book" className="ls-btn-primary">{tr.cta}</a>
+        <a href="#artists" className="ls-btn-outline">{tr.ctaSecondary}</a>
       </div>
     </section>
   )

@@ -7,9 +7,11 @@ import Artists from './sections/Artists'
 import BookingForm from './sections/BookingForm'
 import FAQ from './sections/FAQ'
 import PaymentBadges from './ui/PaymentBadges'
+import { t, type Locale } from './data/translations'
 
 export default function LuminaHome() {
   const [selectedArtist, setSelectedArtist] = useState('')
+  const [locale, setLocale] = useState<Locale>('en')
 
   return (
     <main style={{ background: '#fff', color: '#111', minHeight: '100vh' }}>
@@ -272,46 +274,50 @@ export default function LuminaHome() {
       <nav className="ls-nav">
         <div className="ls-nav-logo">Lumina Sanctum</div>
         <div className="ls-nav-links">
-          <a href="#studio">The Studio</a>
-          <a href="#artists">Artists</a>
-          <a href="#book">Book</a>
-          <a href="#faq">FAQ</a>
+          <a href="#studio">{t[locale].nav.studio}</a>
+          <a href="#artists">{t[locale].nav.artists}</a>
+          <a href="#book">{t[locale].nav.book}</a>
+          <a href="#faq">{t[locale].nav.faq}</a>
+          <button
+            onClick={() => setLocale(locale === 'en' ? 'es' : 'en')}
+            style={{ background: 'none', border: '1px solid #ddd', cursor: 'pointer', fontFamily: 'Josefin Sans, sans-serif', fontSize: '10px', letterSpacing: '0.3em', color: '#666', padding: '4px 10px' }}
+          >
+            {locale === 'en' ? 'ES' : 'EN'}
+          </button>
         </div>
       </nav>
 
-      <Hero />
-      <Studio />
-      <Artists selectedArtist={selectedArtist} onSelect={setSelectedArtist} />
+      <Hero locale={locale} />
+      <Studio locale={locale} />
+      <Artists selectedArtist={selectedArtist} onSelect={setSelectedArtist} locale={locale} />
 
       <section className="ls-section ls-booking" id="book">
         <div className="ls-booking-grid">
           <div>
-            <div className="ls-section-label">Appointments</div>
-            <h2 className="ls-section-title">Book your<br /><em>session</em></h2>
+            <div className="ls-section-label">{t[locale].booking.label}</div>
+            <h2 className="ls-section-title">{t[locale].booking.title}<br /><em>{t[locale].booking.titleEm}</em></h2>
             <p style={{ fontSize: '15px', color: '#777', lineHeight: 2, letterSpacing: '0.05em' }}>
-              Tell us about your idea. We'll get back to you within 3–5 days
-              with availability and a quote.
+              {t[locale].booking.body}
             </p>
             <div className="ls-booking-note">
-              A non-refundable deposit is required to secure your appointment.
-              It will be deducted from the total cost of your tattoo.
+              {t[locale].booking.deposit}
             </div>
             <div style={{ marginTop: '32px' }}>
-              <PaymentBadges />
+              <PaymentBadges label={t[locale].booking.accept} />
             </div>
           </div>
-          <BookingForm initialArtist={selectedArtist} />
+          <BookingForm initialArtist={selectedArtist} locale={locale} />
         </div>
       </section>
 
-      <FAQ />
+      <FAQ locale={locale} />
 
       <footer className="ls-footer">
         <div className="ls-footer-logo">Lumina Sanctum</div>
         <div className="ls-footer-links">
-          <a href="https://instagram.com/luminasanctum" target="_blank">Instagram</a>
+          <a href="https://instagram.com/luminasanctum" target="_blank">{t[locale].footer.instagram}</a>
           <a href="https://luminasanctum.com">luminasanctum.com</a>
-          <a href="#book">Book now</a>
+          <a href="#book">{t[locale].footer.book}</a>
         </div>
       </footer>
     </main>
