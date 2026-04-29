@@ -28,7 +28,15 @@ export default function ArtistCard({ artist, selected, selectedLabel, locale, on
         <div className="ls-artist-role">{artist.role[locale]}</div>
         <div className="ls-artist-styles">{artist.styles[locale]}</div>
         <p style={{ fontSize: '14px', color: '#888', lineHeight: 1.7, marginBottom: '16px' }}>{artist.bio[locale]}</p>
-        <div className="ls-artist-ig">{artist.ig}</div>
+        <a
+          className="ls-artist-ig"
+          href={`https://instagram.com/${artist.ig.replace('@', '')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={e => e.stopPropagation()}
+        >
+          {artist.ig}
+        </a>
       </div>
     </div>
   )

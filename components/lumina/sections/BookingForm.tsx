@@ -153,23 +153,23 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
       {/* Instrucciones antes del form */}
       {step === 0 && (
         <div style={{ marginBottom: '40px', padding: '28px 32px', background: '#fff', border: '1px solid #e8e8e8' }}>
-          <div style={{ fontSize: '11px', letterSpacing: '0.4em', textTransform: 'uppercase', color: '#aaa', marginBottom: '14px' }}>
+          <div style={{ fontSize: '11px', letterSpacing: '0.4em', textTransform: 'uppercase', color: '#888', marginBottom: '14px' }}>
             {tr.formIntro.title}
           </div>
-          <p style={{ fontSize: '13px', color: '#666', lineHeight: 1.8, marginBottom: '20px', letterSpacing: '0.02em' }}>
+          <p style={{ fontSize: '14px', color: '#444', lineHeight: 1.8, marginBottom: '20px', letterSpacing: '0.02em' }}>
             {tr.formIntro.body}
           </p>
           <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {tr.formIntro.items.map((item, i) => (
               <li key={i} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-                <span style={{ fontSize: '9px', letterSpacing: '0.2em', color: '#aaa', paddingTop: '3px', flexShrink: 0 }}>
+                <span style={{ fontSize: '9px', letterSpacing: '0.2em', color: '#999', paddingTop: '3px', flexShrink: 0 }}>
                   0{i + 1}
                 </span>
-                <span style={{ fontSize: '13px', color: '#555', lineHeight: 1.7, letterSpacing: '0.02em' }}>{item}</span>
+                <span style={{ fontSize: '14px', color: '#444', lineHeight: 1.7, letterSpacing: '0.02em' }}>{item}</span>
               </li>
             ))}
           </ul>
-          <p style={{ fontSize: '12px', color: '#aaa', lineHeight: 1.7, fontStyle: 'italic', letterSpacing: '0.02em' }}>
+          <p style={{ fontSize: '13px', color: '#777', lineHeight: 1.7, fontStyle: 'italic', letterSpacing: '0.02em' }}>
             {tr.formIntro.note}
           </p>
         </div>

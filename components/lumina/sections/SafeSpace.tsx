@@ -42,14 +42,14 @@ export default function SafeSpace({ locale }: Props) {
         }}>
           {tr.title} <em>{tr.titleEm}</em>
         </h2>
-        <div className="ls-safespace-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#1a1a1a' }}>
+        <div className="ls-safespace-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#2a2a2a' }}>
           {tr.items.map((item) => (
             <div key={item.icon} style={{ padding: '36px 28px', background: '#0e0e0e', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ color: '#333' }}>{icons[item.icon]}</div>
-              <div style={{ fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#555', fontFamily: 'Jost, sans-serif' }}>
+              <div style={{ color: '#888' }}>{icons[item.icon]}</div>
+              <div style={{ fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c0c0c0', fontFamily: 'Jost, sans-serif' }}>
                 {item.title}
               </div>
-              <p style={{ fontSize: '13px', color: '#555', lineHeight: 1.9, letterSpacing: '0.02em' }}>
+              <p style={{ fontSize: '14px', color: '#888', lineHeight: 1.9, letterSpacing: '0.02em' }}>
                 {item.body}
               </p>
             </div>

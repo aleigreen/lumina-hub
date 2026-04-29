@@ -170,7 +170,8 @@ export default function LuminaHome() {
           font-size: 15px; color: #777; letter-spacing: 0.02em;
           margin-bottom: 14px; line-height: 1.6;
         }
-        .ls-artist-ig { font-size: 13px; color: #aaa; letter-spacing: 0.05em; }
+        .ls-artist-ig { font-size: 14px; color: #666; letter-spacing: 0.04em; text-decoration: none; transition: color 0.2s; }
+        .ls-artist-ig:hover { color: #111; }
         .ls-select-badge {
           position: absolute; top: 12px; right: 12px;
           background: #111; color: #fff;
@@ -180,11 +181,11 @@ export default function LuminaHome() {
 
         .ls-booking { background: #f8f8f8; }
         .ls-booking-grid {
-          display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px;
+          display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
           align-items: start;
         }
         .ls-booking-note {
-          font-size: 14px; color: #888; letter-spacing: 0.02em;
+          font-size: 14px; color: #666; letter-spacing: 0.02em;
           line-height: 1.8; margin-top: 24px;
           padding-top: 24px; border-top: 1px solid #ddd;
         }
@@ -440,7 +441,7 @@ export default function LuminaHome() {
           <div>
             <div className="ls-section-label">{t[locale].booking.label}</div>
             <h2 className="ls-section-title">{t[locale].booking.title}<br /><em>{t[locale].booking.titleEm}</em></h2>
-            <p style={{ fontSize: '15px', color: '#777', lineHeight: 2, letterSpacing: '0.05em' }}>
+            <p style={{ fontSize: '15px', color: '#555', lineHeight: 2, letterSpacing: '0.05em' }}>
               {t[locale].booking.body}
             </p>
             <div className="ls-booking-note">
