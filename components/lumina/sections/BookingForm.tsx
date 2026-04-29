@@ -386,10 +386,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
 
           <div className="ls-form-group">
             <label>{tr.form.date}</label>
-            <div
-              onClick={() => dateInputRef.current?.showPicker?.()}
-              style={{ position: 'relative', cursor: 'pointer' }}
-            >
+            <div style={{ position: 'relative', display: 'inline-block' }}>
               <input
                 ref={dateInputRef}
                 type="date"
@@ -397,16 +394,26 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 min={minDate}
                 onKeyDown={e => e.preventDefault()}
                 onChange={e => set({ date: e.target.value })}
-                style={{ cursor: 'pointer', caretColor: 'transparent', maxWidth: '260px' }}
+                style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', top: 0, left: 0, cursor: 'pointer', zIndex: 1 }}
               />
-              {!form.date && (
-                <span style={{
-                  position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)',
-                  fontSize: '13px', color: '#aaa', pointerEvents: 'none', letterSpacing: '0.02em',
-                }}>
-                  {tr.form.datePlaceholder}
-                </span>
-              )}
+              <button
+                type="button"
+                onClick={() => dateInputRef.current?.showPicker?.()}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '10px',
+                  background: 'none', border: 'none', borderBottom: '1px solid #ddd',
+                  padding: '10px 0', cursor: 'pointer', minWidth: '220px',
+                  fontSize: '13px', letterSpacing: '0.04em', color: form.date ? '#111' : '#aaa',
+                  fontFamily: 'Jost, sans-serif',
+                }}
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                {form.date
+                  ? new Date(form.date + 'T00:00:00').toLocaleDateString(locale === 'es' ? 'es-MX' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' })
+                  : tr.form.datePlaceholder}
+              </button>
             </div>
             <p style={{ fontSize: '11px', color: '#aaa', lineHeight: 1.7, marginTop: '10px', letterSpacing: '0.02em' }}>
               {tr.form.dateDisclaimer}
