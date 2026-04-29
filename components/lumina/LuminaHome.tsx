@@ -40,8 +40,8 @@ export default function LuminaHome() {
         .ls-nav-links { display: flex; gap: 40px; }
         .ls-nav-links a {
           font-family: 'Jost', sans-serif;
-          font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-          color: #666; text-decoration: none; transition: color 0.2s;
+          font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+          color: #444; text-decoration: none; transition: color 0.2s;
         }
         .ls-nav-links a:hover { color: #111; }
 
@@ -55,8 +55,8 @@ export default function LuminaHome() {
           gap: 0;
         }
         .ls-hero-eyebrow {
-          font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase;
-          color: #999; margin-bottom: 24px;
+          font-size: 13px; letter-spacing: 0.28em; text-transform: uppercase;
+          color: #666; margin-bottom: 24px;
         }
         .ls-hero-title {
           font-family: 'Cormorant Garamond', serif;
@@ -66,16 +66,16 @@ export default function LuminaHome() {
         }
         .ls-hero-subtitle {
           font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(22px, 3.5vw, 44px);
+          font-size: clamp(24px, 3.5vw, 44px);
           font-weight: 300; font-style: italic;
-          color: #888; margin-bottom: 32px; margin-top: 4px;
+          color: #666; margin-bottom: 32px; margin-top: 4px;
         }
         .ls-hero-divider {
           width: 1px; height: 48px; background: #ddd; margin-bottom: 24px;
         }
         .ls-hero-location {
-          font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
-          color: #bbb; margin-bottom: 40px;
+          font-size: 13px; letter-spacing: 0.25em; text-transform: uppercase;
+          color: #888; margin-bottom: 40px;
         }
         .ls-hero-cta {
           display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
@@ -103,8 +103,8 @@ export default function LuminaHome() {
 
         .ls-section { padding: 100px 60px; border-bottom: 1px solid #e8e8e8; }
         .ls-section-label {
-          font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase;
-          color: #aaa; margin-bottom: 20px;
+          font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase;
+          color: #777; margin-bottom: 20px;
         }
         .ls-section-title {
           font-family: 'Cormorant Garamond', serif;
@@ -164,10 +164,10 @@ export default function LuminaHome() {
         }
         .ls-artist-role {
           font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
-          color: #999; margin-bottom: 12px;
+          color: #777; margin-bottom: 12px;
         }
         .ls-artist-styles {
-          font-size: 15px; color: #777; letter-spacing: 0.02em;
+          font-size: 15px; color: #555; letter-spacing: 0.02em;
           margin-bottom: 14px; line-height: 1.6;
         }
         .ls-artist-ig { font-size: 14px; color: #666; letter-spacing: 0.04em; text-decoration: none; transition: color 0.2s; }
@@ -193,7 +193,7 @@ export default function LuminaHome() {
         .ls-form-group { margin-bottom: 24px; }
         .ls-form-group label {
           display: block; font-size: 12px; letter-spacing: 0.2em;
-          text-transform: uppercase; color: #aaa; margin-bottom: 8px;
+          text-transform: uppercase; color: #666; margin-bottom: 8px;
         }
         .ls-form-group input,
         .ls-form-group textarea,
@@ -216,7 +216,7 @@ export default function LuminaHome() {
           border: 1px solid #ddd; cursor: pointer;
           font-family: 'Jost', sans-serif;
           font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
-          color: #999; transition: all 0.2s; text-align: center;
+          color: #555; transition: all 0.2s; text-align: center;
         }
         .ls-artist-btn:hover { border-color: #111; color: #111; }
         .ls-artist-btn.active { background: #111; color: #fff; border-color: #111; }
@@ -226,12 +226,12 @@ export default function LuminaHome() {
           display: flex; justify-content: space-between; align-items: center;
           padding: 28px 0; cursor: pointer;
           font-family: 'Cormorant Garamond', serif;
-          font-size: 22px; font-weight: 400; letter-spacing: 0.02em;
+          font-size: 24px; font-weight: 400; letter-spacing: 0.02em;
           transition: color 0.2s;
         }
         .ls-faq-q:hover { color: #555; }
         .ls-faq-icon {
-          font-size: 20px; font-weight: 300; color: #aaa;
+          font-size: 22px; font-weight: 300; color: #666;
           transition: transform 0.3s; flex-shrink: 0;
         }
         .ls-faq-icon.open { transform: rotate(45deg); }
@@ -239,13 +239,13 @@ export default function LuminaHome() {
           max-height: 0; overflow: hidden;
           transition: max-height 0.4s ease, padding 0.4s ease;
         }
-        .ls-faq-a.open { max-height: 200px; padding-bottom: 24px; }
-        .ls-faq-a p { font-size: 15px; line-height: 2; color: #666; letter-spacing: 0.05em; }
+        .ls-faq-a.open { max-height: 300px; padding-bottom: 28px; }
+        .ls-faq-a p { font-size: 16px; line-height: 2; color: #444; letter-spacing: 0.02em; }
 
         .ls-payments { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
         .ls-payment-chip {
-          padding: 8px 16px; border: 1px solid #ddd;
-          font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: #888;
+          padding: 8px 16px; border: 1px solid #ccc;
+          font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: #555;
         }
 
         .ls-success { text-align: center; padding: 60px 40px; }
@@ -265,8 +265,8 @@ export default function LuminaHome() {
         }
         .ls-footer-links { display: flex; gap: 32px; }
         .ls-footer-links a {
-          font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-          color: #aaa; text-decoration: none; transition: color 0.2s;
+          font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+          color: #666; text-decoration: none; transition: color 0.2s;
         }
         .ls-footer-links a:hover { color: #111; }
 

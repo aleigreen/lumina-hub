@@ -40,16 +40,16 @@ export default function Studio({ locale }: Props) {
         {open && (
           <div className="ls-identity-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }}>
             <div style={{ padding: '40px 48px', background: '#f8f8f8' }}>
-              <div style={{ fontSize: '10px', letterSpacing: '0.4em', textTransform: 'uppercase', color: '#aaa', marginBottom: '20px' }}>
+              <div style={{ fontSize: '11px', letterSpacing: '0.35em', textTransform: 'uppercase', color: '#777', marginBottom: '20px' }}>
                 {id.missionTitle}
               </div>
-              <p style={{ fontSize: '14px', color: '#444', lineHeight: 2, letterSpacing: '0.03em' }}>{id.missionBody}</p>
+              <p style={{ fontSize: '15px', color: '#333', lineHeight: 2, letterSpacing: '0.02em' }}>{id.missionBody}</p>
             </div>
             <div style={{ padding: '40px 48px', background: '#111' }}>
-              <div style={{ fontSize: '10px', letterSpacing: '0.4em', textTransform: 'uppercase', color: '#555', marginBottom: '20px' }}>
+              <div style={{ fontSize: '11px', letterSpacing: '0.35em', textTransform: 'uppercase', color: '#888', marginBottom: '20px' }}>
                 {id.visionTitle}
               </div>
-              <p style={{ fontSize: '14px', color: '#bbb', lineHeight: 2, letterSpacing: '0.03em' }}>{id.visionBody}</p>
+              <p style={{ fontSize: '15px', color: '#ccc', lineHeight: 2, letterSpacing: '0.02em' }}>{id.visionBody}</p>
             </div>
           </div>
         )}

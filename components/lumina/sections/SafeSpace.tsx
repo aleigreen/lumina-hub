@@ -33,7 +33,7 @@ export default function SafeSpace({ locale }: Props) {
   return (
     <section id="safe-space" className="ls-safespace-section" style={{ padding: '80px 60px', background: '#0e0e0e', borderBottom: '1px solid #1a1a1a' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div className="ls-section-label" style={{ color: '#444', marginBottom: '16px' }}>{tr.label}</div>
+        <div className="ls-section-label" style={{ color: '#888', marginBottom: '16px' }}>{tr.label}</div>
         <h2 style={{
           fontFamily: 'Cormorant Garamond, serif',
           fontSize: 'clamp(32px, 4vw, 56px)',

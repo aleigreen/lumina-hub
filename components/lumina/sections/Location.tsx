@@ -11,18 +11,18 @@ export default function Location({ locale }: Props) {
           <div className="ls-section-label" style={{ marginBottom: '28px' }}>{loc.label}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '32px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '3px' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '3px' }}>
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
               </svg>
-              <span style={{ fontSize: '14px', color: '#444', letterSpacing: '0.05em', lineHeight: 1.7 }}>{loc.address}</span>
+              <span style={{ fontSize: '15px', color: '#333', letterSpacing: '0.03em', lineHeight: 1.7 }}>{loc.address}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '3px' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '3px' }}>
                 <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
               </svg>
               <div>
-                <div style={{ fontSize: '14px', color: '#444', letterSpacing: '0.05em' }}>{loc.hours}</div>
-                <div style={{ fontSize: '12px', color: '#aaa', letterSpacing: '0.05em', marginTop: '4px' }}>{loc.hoursDetail}</div>
+                <div style={{ fontSize: '15px', color: '#333', letterSpacing: '0.03em' }}>{loc.hours}</div>
+                <div style={{ fontSize: '13px', color: '#666', letterSpacing: '0.03em', marginTop: '4px' }}>{loc.hoursDetail}</div>
               </div>
             </div>
           </div>
@@ -30,7 +30,7 @@ export default function Location({ locale }: Props) {
             href="https://maps.app.goo.gl/eGjS5QGLUWSWGDJm9"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '9px', letterSpacing: '0.35em', textTransform: 'uppercase', color: '#111', textDecoration: 'none', borderBottom: '1px solid #111', paddingBottom: '2px' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '11px', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#111', textDecoration: 'none', borderBottom: '1px solid #111', paddingBottom: '2px' }}
           >
             {loc.directions} →
           </a>

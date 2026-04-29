@@ -268,7 +268,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
           {/* Zone photo upload */}
           <div style={{ marginBottom: '32px' }}>
             <div className="ls-section-label" style={{ marginBottom: '8px' }}>{tr.form.zonePhoto}</div>
-            <p style={{ fontSize: '11px', color: '#aaa', marginBottom: '12px', letterSpacing: '0.02em' }}>{tr.form.zonePhotoHint}</p>
+            <p style={{ fontSize: '13px', color: '#666', marginBottom: '12px', letterSpacing: '0.02em' }}>{tr.form.zonePhotoHint}</p>
             {zonePhoto ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <img
@@ -331,7 +331,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
           {/* Reference photos */}
           <div style={{ marginBottom: '28px' }}>
             <div className="ls-section-label" style={{ marginBottom: '8px' }}>{tr.form.refPhotos}</div>
-            <p style={{ fontSize: '11px', color: '#aaa', marginBottom: '12px', letterSpacing: '0.02em' }}>{tr.form.refPhotosHint}</p>
+            <p style={{ fontSize: '13px', color: '#666', marginBottom: '12px', letterSpacing: '0.02em' }}>{tr.form.refPhotosHint}</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'flex-end' }}>
               {refPhotos.map((file, i) => (
                 <div key={i} style={{ position: 'relative' }}>
@@ -380,7 +380,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               )}
             </div>
             {refPhotos.length === 4 && (
-              <p style={{ fontSize: '10px', color: '#aaa', marginTop: '8px', letterSpacing: '0.1em' }}>{tr.form.maxFiles}</p>
+              <p style={{ fontSize: '12px', color: '#666', marginTop: '8px', letterSpacing: '0.08em' }}>{tr.form.maxFiles}</p>
             )}
           </div>
 
@@ -415,7 +415,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                   : tr.form.datePlaceholder}
               </button>
             </div>
-            <p style={{ fontSize: '11px', color: '#aaa', lineHeight: 1.7, marginTop: '10px', letterSpacing: '0.02em' }}>
+            <p style={{ fontSize: '13px', color: '#666', lineHeight: 1.8, marginTop: '10px', letterSpacing: '0.02em' }}>
               {tr.form.dateDisclaimer}
             </p>
           </div>
