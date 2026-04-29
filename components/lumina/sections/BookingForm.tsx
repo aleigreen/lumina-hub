@@ -49,6 +49,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
   const [errors, setErrors] = useState<{ email?: string; phone?: string }>({})
   const refInputRef = useRef<HTMLInputElement>(null)
   const zoneInputRef = useRef<HTMLInputElement>(null)
+  const dateInputRef = useRef<HTMLInputElement>(null)
 
   const set = (patch: Partial<FormData>) => setForm(prev => ({ ...prev, ...patch }))
   const selectedZone = bodyZones.find(z => z.id === form.zone)
@@ -385,12 +386,28 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
 
           <div className="ls-form-group">
             <label>{tr.form.date}</label>
-            <input
-              type="date"
-              value={form.date}
-              min={minDate}
-              onChange={e => set({ date: e.target.value })}
-            />
+            <div
+              onClick={() => dateInputRef.current?.showPicker?.()}
+              style={{ position: 'relative', cursor: 'pointer' }}
+            >
+              <input
+                ref={dateInputRef}
+                type="date"
+                value={form.date}
+                min={minDate}
+                onKeyDown={e => e.preventDefault()}
+                onChange={e => set({ date: e.target.value })}
+                style={{ cursor: 'pointer', caretColor: 'transparent', maxWidth: '260px' }}
+              />
+              {!form.date && (
+                <span style={{
+                  position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)',
+                  fontSize: '13px', color: '#aaa', pointerEvents: 'none', letterSpacing: '0.02em',
+                }}>
+                  {tr.form.datePlaceholder}
+                </span>
+              )}
+            </div>
             <p style={{ fontSize: '11px', color: '#aaa', lineHeight: 1.7, marginTop: '10px', letterSpacing: '0.02em' }}>
               {tr.form.dateDisclaimer}
             </p>
