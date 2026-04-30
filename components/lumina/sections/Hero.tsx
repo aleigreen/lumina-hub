@@ -7,6 +7,11 @@ export default function Hero({ locale }: Props) {
   return (
     <section className="ls-hero">
       <div className="ls-hero-eyebrow">{tr.eyebrow}</div>
+      <img
+        src="/lumina/icon-bk.png"
+        alt="Lumina Sanctum"
+        style={{ width: 'clamp(56px, 7vw, 90px)', marginBottom: '24px', opacity: 0.88 }}
+      />
       <h1 className="ls-hero-title">LUMINA</h1>
       <div className="ls-hero-subtitle">{tr.subtitle}</div>
       <div className="ls-hero-divider" />

@@ -19,7 +19,7 @@ export default function LuminaHome() {
   return (
     <main style={{ background: '#fff', color: '#111', minHeight: '100vh' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Jost', sans-serif; }
@@ -33,9 +33,19 @@ export default function LuminaHome() {
           border-bottom: 1px solid #e8e8e8;
         }
         .ls-nav-logo {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 18px; font-weight: 400; letter-spacing: 0.2em;
-          text-transform: uppercase;
+          display: flex; align-items: center; gap: 10px;
+          text-decoration: none; color: #111;
+        }
+        .ls-nav-logo img { display: block; }
+        .ls-nav-logo-text {
+          font-family: 'Cinzel', serif;
+          font-size: 13px; font-weight: 400; letter-spacing: 0.22em;
+          text-transform: uppercase; line-height: 1.2;
+        }
+        .ls-nav-logo-sub {
+          font-family: 'Cinzel', serif;
+          font-size: 8px; font-weight: 400; letter-spacing: 0.45em;
+          text-transform: uppercase; color: #888;
         }
         .ls-nav-links { display: flex; gap: 40px; }
         .ls-nav-links a {
@@ -59,16 +69,17 @@ export default function LuminaHome() {
           color: #666; margin-bottom: 24px;
         }
         .ls-hero-title {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(60px, 9vw, 130px);
-          font-weight: 300; line-height: 1;
-          letter-spacing: 0.05em; margin-bottom: 0;
+          font-family: 'Cinzel', serif;
+          font-size: clamp(52px, 8vw, 120px);
+          font-weight: 400; line-height: 1;
+          letter-spacing: 0.12em; margin-bottom: 0;
         }
         .ls-hero-subtitle {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(24px, 3.5vw, 44px);
-          font-weight: 300; font-style: italic;
-          color: #666; margin-bottom: 32px; margin-top: 4px;
+          font-family: 'Cinzel', serif;
+          font-size: clamp(14px, 2vw, 22px);
+          font-weight: 400; letter-spacing: 0.5em;
+          color: #666; margin-bottom: 32px; margin-top: 10px;
+          text-transform: uppercase;
         }
         .ls-hero-divider {
           width: 1px; height: 48px; background: #ddd; margin-bottom: 24px;
@@ -107,12 +118,12 @@ export default function LuminaHome() {
           color: #777; margin-bottom: 20px;
         }
         .ls-section-title {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(36px, 4vw, 64px);
-          font-weight: 300; line-height: 1.05;
-          margin-bottom: 60px;
+          font-family: 'Cinzel', serif;
+          font-size: clamp(30px, 3.5vw, 52px);
+          font-weight: 400; line-height: 1.1;
+          margin-bottom: 60px; letter-spacing: 0.05em;
         }
-        .ls-section-title em { font-style: italic; }
+        .ls-section-title em { font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 1.15em; font-weight: 300; }
 
         .ls-studio-grid {
           display: grid;
@@ -260,8 +271,17 @@ export default function LuminaHome() {
           display: flex; justify-content: space-between; align-items: center;
         }
         .ls-footer-logo {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 20px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase;
+          display: flex; align-items: center; gap: 10px;
+        }
+        .ls-footer-logo-text {
+          font-family: 'Cinzel', serif;
+          font-size: 13px; font-weight: 400; letter-spacing: 0.22em; text-transform: uppercase;
+          line-height: 1.2;
+        }
+        .ls-footer-logo-sub {
+          font-family: 'Cinzel', serif;
+          font-size: 8px; font-weight: 400; letter-spacing: 0.45em;
+          text-transform: uppercase; color: #888;
         }
         .ls-footer-links { display: flex; gap: 32px; }
         .ls-footer-links a {
@@ -383,7 +403,13 @@ export default function LuminaHome() {
       `}</style>
 
       <nav className="ls-nav">
-        <div className="ls-nav-logo">Lumina Sanctum</div>
+        <a href="#" className="ls-nav-logo">
+          <img src="/lumina/icon-bk.png" alt="Lumina Sanctum" height={32} width={20} style={{ objectFit: 'contain' }} />
+          <div>
+            <div className="ls-nav-logo-text">Lumina</div>
+            <div className="ls-nav-logo-sub">Sanctum</div>
+          </div>
+        </a>
         <div className="ls-nav-links">
           <a href="#studio">{t[locale].nav.studio}</a>
           <a href="#artists">{t[locale].nav.artists}</a>
@@ -459,7 +485,13 @@ export default function LuminaHome() {
       <Location locale={locale} />
 
       <footer className="ls-footer">
-        <div className="ls-footer-logo">Lumina Sanctum</div>
+        <div className="ls-footer-logo">
+          <img src="/lumina/icon-bk.png" alt="Lumina Sanctum" height={28} width={18} style={{ objectFit: 'contain' }} />
+          <div>
+            <div className="ls-footer-logo-text">Lumina</div>
+            <div className="ls-footer-logo-sub">Sanctum</div>
+          </div>
+        </div>
         <div className="ls-footer-links">
           <a href="https://instagram.com/luminasanctum" target="_blank">{t[locale].footer.instagram}</a>
           <a href="https://luminasanctum.com">luminasanctum.com</a>
