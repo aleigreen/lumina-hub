@@ -166,7 +166,7 @@ export default function LuminaHome() {
           display: grid; grid-template-columns: 60px 1.2fr 1.5fr 1fr;
           align-items: start; padding: 32px 0;
           border-top: 1px solid rgba(232,219,196,0.10);
-          cursor: pointer; transition: background 0.3s;
+          cursor: pointer; transition: background 0.3s, padding 0.3s;
           gap: 24px;
         }
         .ls-artist-row:last-child { border-bottom: 1px solid rgba(232,219,196,0.10); }
@@ -180,7 +180,7 @@ export default function LuminaHome() {
           font-family: 'Bodoni Moda', serif;
           font-size: clamp(28px, 4vw, 56px);
           font-weight: 300; line-height: 1; color: #e8dfcf;
-          transition: font-style 0.3s;
+          transition: font-style 0.3s, color 0.3s;
         }
         .ls-artist-row.open .ls-artist-name { font-style: italic; color: #c8a872; }
         .ls-artist-role-label {
