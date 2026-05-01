@@ -5,12 +5,12 @@ type Props = { locale: Locale }
 export default function Hero({ locale }: Props) {
   const tr = t[locale].hero
   return (
-    <section className="ls-hero">
+    <section className="ls-hero" id="hero">
       <div className="ls-hero-eyebrow">{tr.eyebrow}</div>
       <img
-        src="/lumina/icon-bk.png"
+        src="/lumina/icon-wt.png"
         alt="Lumina Sanctum"
-        style={{ width: 'clamp(56px, 7vw, 90px)', marginBottom: '24px', opacity: 0.88 }}
+        style={{ width: 'clamp(48px, 6vw, 80px)', marginBottom: '20px', opacity: 0.9 }}
       />
       <h1 className="ls-hero-title">LUMINA</h1>
       <div className="ls-hero-subtitle">{tr.subtitle}</div>
