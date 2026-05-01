@@ -190,9 +190,9 @@ export default function LuminaHome() {
         }
         .ls-artist-bio-wrap {
           max-height: 0; overflow: hidden; opacity: 0;
-          transition: max-height 0.4s ease, opacity 0.3s ease;
+          transition: max-height 0.5s ease, opacity 0.3s ease;
         }
-        .ls-artist-row.open .ls-artist-bio-wrap { max-height: 200px; opacity: 1; }
+        .ls-artist-row.open .ls-artist-bio-wrap { max-height: 320px; opacity: 1; }
         .ls-artist-bio {
           font-family: 'Bodoni Moda', serif;
           font-size: 16px; color: #c9bfa9; line-height: 1.7; padding-top: 4px;
