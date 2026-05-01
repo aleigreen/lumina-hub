@@ -39,18 +39,18 @@ export default function LuminaHome() {
         }
         .ls-nav-logo img { display: block; }
         .ls-nav-logo-wordmark {
-          display: flex; flex-direction: column; align-items: flex-start; line-height: 1;
+          display: flex; flex-direction: column; align-items: stretch; line-height: 1;
         }
         .ls-nav-logo-text {
           font-family: 'Bodoni Moda', serif;
-          font-size: 18px; font-weight: 400; letter-spacing: 0.12em;
+          font-size: 20px; font-weight: 400; letter-spacing: 0.12em;
           text-transform: uppercase; color: #e8dfcf; line-height: 1;
         }
         .ls-nav-logo-sub {
           font-family: 'Bodoni Moda', serif;
-          font-size: 9px; font-weight: 400; letter-spacing: 0.45em;
+          font-size: 8px; font-weight: 400; letter-spacing: 0.52em;
           text-transform: uppercase; color: #c8a872;
-          align-self: flex-end; margin-top: 2px;
+          text-align: right; margin-top: 2px;
         }
         .ls-nav-links { display: flex; gap: 40px; align-items: center; }
         .ls-nav-links a {
@@ -79,8 +79,9 @@ export default function LuminaHome() {
           color: #c8a872; margin-bottom: 28px;
           display: flex; align-items: center; gap: 16px;
         }
-        .ls-hero-eyebrow::before {
-          content: ''; display: block; width: 28px; height: 1px; background: #c8a872;
+        .ls-hero-eyebrow::before,
+        .ls-hero-eyebrow::after {
+          content: ''; display: block; width: 28px; height: 1px; background: #c8a872; flex-shrink: 0;
         }
         .ls-hero-title {
           font-family: 'Bodoni Moda', serif;
@@ -90,10 +91,10 @@ export default function LuminaHome() {
         }
         .ls-hero-subtitle {
           font-family: 'Bodoni Moda', serif;
-          font-size: clamp(14px, 2vw, 26px);
-          font-weight: 400; letter-spacing: 0.45em;
-          color: #c8a872; margin-bottom: 0; margin-top: 4px;
-          text-transform: uppercase; align-self: flex-end;
+          font-size: clamp(12px, 1.6vw, 22px);
+          font-weight: 400; letter-spacing: 0.52em;
+          color: #c8a872; margin-bottom: 0; margin-top: 2px;
+          text-transform: uppercase; text-align: right;
         }
         .ls-hero-divider {
           width: 1px; height: 48px; background: rgba(232,219,196,0.15); margin-bottom: 24px;
@@ -425,6 +426,7 @@ export default function LuminaHome() {
           .ls-nav { padding: 16px 20px; }
           .ls-nav-links { display: none; }
           .ls-hamburger { display: flex; }
+          .ls-nav-logo-wordmark--desktop { display: none; }
 
           .ls-hero { padding: 100px 24px 64px; min-height: 100svh; }
           .ls-hero-eyebrow { font-size: 10px; }
@@ -460,8 +462,8 @@ export default function LuminaHome() {
       {/* NAV */}
       <nav className="ls-nav">
         <a href="#" className="ls-nav-logo">
-          <img src="/lumina/icon-wt.png" alt="" style={{ height: '28px', width: 'auto' }} />
-          <div className="ls-nav-logo-wordmark">
+          <img src="/lumina/icon-wt.png" alt="" style={{ height: '36px', width: 'auto' }} />
+          <div className="ls-nav-logo-wordmark ls-nav-logo-wordmark--desktop">
             <div className="ls-nav-logo-text">LUMINA</div>
             <div className="ls-nav-logo-sub">SANCTUM</div>
           </div>

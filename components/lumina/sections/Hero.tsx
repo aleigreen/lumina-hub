@@ -10,9 +10,9 @@ export default function Hero({ locale }: Props) {
       <img
         src="/lumina/icon-wt.png"
         alt=""
-        style={{ height: 'clamp(64px, 9vw, 110px)', width: 'auto', marginBottom: '20px', opacity: 0.88 }}
+        style={{ height: 'clamp(80px, 10vw, 130px)', width: 'auto', marginBottom: '24px', opacity: 0.88 }}
       />
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '36px', lineHeight: 1 }}>
+      <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'stretch', marginBottom: '36px' }}>
         <h1 className="ls-hero-title">LUMINA</h1>
         <div className="ls-hero-subtitle">SANCTUM</div>
       </div>
