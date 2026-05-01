@@ -38,15 +38,19 @@ export default function LuminaHome() {
           text-decoration: none; color: #e8dfcf;
         }
         .ls-nav-logo img { display: block; }
+        .ls-nav-logo-wordmark {
+          display: flex; flex-direction: column; align-items: flex-start; line-height: 1;
+        }
         .ls-nav-logo-text {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 11px; font-weight: 500; letter-spacing: 0.22em;
-          text-transform: uppercase; line-height: 1.2; color: #e8dfcf;
+          font-family: 'Bodoni Moda', serif;
+          font-size: 18px; font-weight: 400; letter-spacing: 0.12em;
+          text-transform: uppercase; color: #e8dfcf; line-height: 1;
         }
         .ls-nav-logo-sub {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 8px; font-weight: 400; letter-spacing: 0.45em;
+          font-family: 'Bodoni Moda', serif;
+          font-size: 9px; font-weight: 400; letter-spacing: 0.45em;
           text-transform: uppercase; color: #c8a872;
+          align-self: flex-end; margin-top: 2px;
         }
         .ls-nav-links { display: flex; gap: 40px; align-items: center; }
         .ls-nav-links a {
@@ -86,10 +90,10 @@ export default function LuminaHome() {
         }
         .ls-hero-subtitle {
           font-family: 'Bodoni Moda', serif;
-          font-size: clamp(40px, 7vw, 144px);
-          font-weight: 300; font-style: italic;
-          color: #c8a872; margin-bottom: 28px; margin-top: 0;
-          line-height: 1;
+          font-size: clamp(14px, 2vw, 26px);
+          font-weight: 400; letter-spacing: 0.45em;
+          color: #c8a872; margin-bottom: 0; margin-top: 4px;
+          text-transform: uppercase; align-self: flex-end;
         }
         .ls-hero-divider {
           width: 1px; height: 48px; background: rgba(232,219,196,0.15); margin-bottom: 24px;
@@ -456,10 +460,10 @@ export default function LuminaHome() {
       {/* NAV */}
       <nav className="ls-nav">
         <a href="#" className="ls-nav-logo">
-          <img src="/lumina/icon-wt.png" alt="Lumina Sanctum" height={32} width={20} style={{ objectFit: 'contain' }} />
-          <div>
-            <div className="ls-nav-logo-text">Lumina</div>
-            <div className="ls-nav-logo-sub">Sanctum</div>
+          <img src="/lumina/icon-wt.png" alt="" style={{ height: '28px', width: 'auto' }} />
+          <div className="ls-nav-logo-wordmark">
+            <div className="ls-nav-logo-text">LUMINA</div>
+            <div className="ls-nav-logo-sub">SANCTUM</div>
           </div>
         </a>
         <div className="ls-nav-links">

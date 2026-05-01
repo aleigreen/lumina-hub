@@ -9,11 +9,13 @@ export default function Hero({ locale }: Props) {
       <div className="ls-hero-eyebrow">{tr.eyebrow}</div>
       <img
         src="/lumina/icon-wt.png"
-        alt="Lumina Sanctum"
-        style={{ width: 'clamp(48px, 6vw, 80px)', marginBottom: '20px', opacity: 0.9 }}
+        alt=""
+        style={{ height: 'clamp(64px, 9vw, 110px)', width: 'auto', marginBottom: '20px', opacity: 0.88 }}
       />
-      <h1 className="ls-hero-title">LUMINA</h1>
-      <div className="ls-hero-subtitle">{tr.subtitle}</div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '36px', lineHeight: 1 }}>
+        <h1 className="ls-hero-title">LUMINA</h1>
+        <div className="ls-hero-subtitle">SANCTUM</div>
+      </div>
       <div className="ls-hero-divider" />
       <div className="ls-hero-location">{tr.location}</div>
       <div className="ls-hero-cta">
