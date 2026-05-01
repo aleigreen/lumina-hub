@@ -61,4 +61,21 @@ export const artists: ArtistData[] = [
       es: 'Originaria de Ciudad de México, 3 años de experiencia. Enfocada en desarrollar un estilo personal influenciado por la botánica y comprometida con el refinamiento técnico.',
     },
   },
+  {
+    name: 'Connyyink',
+    ig: '@connying',
+    whatsapp: null,
+    role: {
+      en: 'Resident Artist',
+      es: 'Artista Residente',
+    },
+    styles: {
+      en: 'Realism · Micro-realism',
+      es: 'Realismo · Microrealismo',
+    },
+    bio: {
+      en: 'Realism and micro-realism specialist. Precision and detail in every piece.',
+      es: 'Especialista en realismo y microrealismo. Precisión y detalle en cada pieza.',
+    },
+  },
 ]
