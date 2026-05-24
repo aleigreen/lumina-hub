@@ -20,7 +20,7 @@ export default function LuminaHome() {
   return (
     <main style={{ background: '#0d0a07', color: '#e8dfcf', minHeight: '100vh' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'JetBrains Mono', monospace; background: #0d0a07; }
@@ -66,9 +66,9 @@ export default function LuminaHome() {
         }
         .ls-nav-links { display: flex; gap: 40px; align-items: center; }
         .ls-nav-links a {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-          color: #c9bfa9; text-decoration: none; transition: color 0.2s;
+          font-family: 'Inter', sans-serif;
+          font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+          font-weight: 400; color: #c9bfa9; text-decoration: none; transition: color 0.2s;
         }
         .ls-nav-links a:hover { color: #c8a872; }
 
@@ -144,9 +144,9 @@ export default function LuminaHome() {
         /* ── SECTIONS ── */
         .ls-section { padding: 120px 64px; border-bottom: 1px solid rgba(232,219,196,0.10); }
         .ls-section-label {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase;
-          color: #c8a872; margin-bottom: 20px;
+          font-family: 'Inter', sans-serif;
+          font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+          font-weight: 500; color: #c8a872; margin-bottom: 20px;
         }
         .ls-section-title {
           font-family: 'Bodoni Moda', serif;
@@ -201,9 +201,9 @@ export default function LuminaHome() {
         }
         .ls-artist-row.open .ls-artist-name { font-style: italic; color: #c8a872; }
         .ls-artist-role-label {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-          color: #c9bfa9; margin-top: 8px;
+          font-family: 'Inter', sans-serif;
+          font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+          font-weight: 400; color: #c9bfa9; margin-top: 8px;
         }
         .ls-artist-bio-wrap {
           max-height: 0; overflow: hidden; opacity: 0;
@@ -212,18 +212,18 @@ export default function LuminaHome() {
         }
         .ls-artist-row.open .ls-artist-bio-wrap { max-height: 800px; opacity: 1; }
         .ls-artist-bio {
-          font-family: 'Bodoni Moda', serif;
-          font-size: 16px; color: #c9bfa9; line-height: 1.7; padding-top: 4px;
+          font-family: 'Inter', sans-serif;
+          font-size: 15px; font-weight: 300; color: #c9bfa9; line-height: 1.8; padding-top: 4px;
         }
         .ls-artist-tags-wrap { text-align: right; padding-top: 6px; }
         .ls-artist-tags {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
-          color: #c9bfa9; line-height: 1.8;
+          font-family: 'Inter', sans-serif;
+          font-size: 12px; letter-spacing: 0.05em;
+          font-weight: 300; color: #c9bfa9; line-height: 2;
         }
         .ls-artist-ig-link {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 13px; letter-spacing: 0.10em; color: #c8a872;
+          font-family: 'Inter', sans-serif;
+          font-size: 13px; letter-spacing: 0.04em; font-weight: 400; color: #c8a872;
           text-decoration: none; display: block; margin-top: 10px;
           transition: color 0.2s;
         }
