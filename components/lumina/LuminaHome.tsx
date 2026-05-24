@@ -711,7 +711,7 @@ export default function LuminaHome() {
         <div className="ls-footer-bottom">
           <div className="ls-footer-copy">© MMXXVI · Lumina Sanctum</div>
           <div className="ls-footer-links">
-            <a href="https://instagram.com/luminasanctum" target="_blank">{t[locale].footer.instagram}</a>
+            <a href="https://instagram.com/luminasanctum.tattoo" target="_blank">{t[locale].footer.instagram}</a>
             <a href="#book">{t[locale].footer.book}</a>
           </div>
         </div>
