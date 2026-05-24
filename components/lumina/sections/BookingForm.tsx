@@ -47,9 +47,15 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
   const [refPhotos, setRefPhotos] = useState<File[]>([])
   const [zonePhoto, setZonePhoto] = useState<File | null>(null)
   const [errors, setErrors] = useState<{ email?: string; phone?: string }>({})
+  const [shake, setShake] = useState(false)
   const refInputRef = useRef<HTMLInputElement>(null)
   const zoneInputRef = useRef<HTMLInputElement>(null)
   const dateInputRef = useRef<HTMLInputElement>(null)
+
+  const triggerShake = () => {
+    setShake(true)
+    setTimeout(() => setShake(false), 500)
+  }
 
   const set = (patch: Partial<FormData>) => setForm(prev => ({ ...prev, ...patch }))
   const selectedZone = bodyZones.find(z => z.id === form.zone)
@@ -117,7 +123,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
   }
 
   return (
-    <div>
+    <div className={shake ? 'ls-form-shake' : ''}>
       {/* Instrucciones antes del form */}
       {step === 0 && (
         <div style={{ marginBottom: '40px', padding: '28px 32px', background: '#fff', border: '1px solid #e8e8e8' }}>
@@ -187,8 +193,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 type="button"
                 className="ls-btn-primary"
                 style={{ width: '100%', justifyContent: 'center' }}
-                disabled={!form.artist}
-                onClick={() => setStep(1)}
+                onClick={() => form.artist ? setStep(1) : triggerShake()}
               >
                 {tr.form.continue}
               </button>
@@ -273,8 +278,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               type="button"
               className="ls-btn-primary"
               style={{ flex: 1, justifyContent: 'center' }}
-              disabled={!form.zone || !form.size}
-              onClick={() => setStep(2)}
+              onClick={() => (form.zone && form.size) ? setStep(2) : triggerShake()}
             >
               {tr.form.continue}
             </button>
@@ -398,8 +402,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               type="button"
               className="ls-btn-primary"
               style={{ flex: 1, justifyContent: 'center' }}
-              disabled={!form.description.trim()}
-              onClick={() => setStep(3)}
+              onClick={() => form.description.trim() ? setStep(3) : triggerShake()}
             >
               {tr.form.continue}
             </button>
@@ -452,8 +455,11 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               type="button"
               className="ls-btn-primary"
               style={{ flex: 1, justifyContent: 'center' }}
-              disabled={!form.name.trim() || !form.email.trim() || submitting}
-              onClick={() => { if (validateContact()) handleSubmit() }}
+              disabled={submitting}
+              onClick={() => {
+                if (!form.name.trim() || !form.email.trim()) { triggerShake(); return }
+                if (validateContact()) handleSubmit(); else triggerShake()
+              }}
             >
               {submitting ? '...' : tr.form.submit}
             </button>

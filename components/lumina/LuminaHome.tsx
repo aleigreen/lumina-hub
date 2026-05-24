@@ -25,6 +25,17 @@ export default function LuminaHome() {
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'JetBrains Mono', monospace; background: #0d0a07; }
 
+        @keyframes ls-shake {
+          0%, 100% { transform: translateX(0); }
+          15%       { transform: translateX(-8px); }
+          30%       { transform: translateX(7px); }
+          45%       { transform: translateX(-6px); }
+          60%       { transform: translateX(5px); }
+          75%       { transform: translateX(-3px); }
+          90%       { transform: translateX(2px); }
+        }
+        .ls-form-shake { animation: ls-shake 0.5s ease; }
+
         /* ── NAV ── */
         .ls-nav {
           position: fixed; top: 0; left: 0; right: 0; z-index: 100;
