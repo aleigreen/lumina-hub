@@ -46,29 +46,26 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
   })
   const [refPhotos, setRefPhotos] = useState<File[]>([])
   const [zonePhoto, setZonePhoto] = useState<File | null>(null)
-  const [errors, setErrors] = useState<{ email?: string; phone?: string }>({})
-  const [shake, setShake] = useState(false)
+  const [errors, setErrors] = useState<{ email?: string; phone?: string; artist?: string; zone?: string; size?: string; description?: string; name?: string }>({})
   const refInputRef = useRef<HTMLInputElement>(null)
   const zoneInputRef = useRef<HTMLInputElement>(null)
   const dateInputRef = useRef<HTMLInputElement>(null)
 
-  const triggerShake = () => {
-    setShake(true)
-    setTimeout(() => setShake(false), 500)
-  }
+  const clearError = (field: string) => setErrors(prev => ({ ...prev, [field]: undefined }))
 
   const set = (patch: Partial<FormData>) => setForm(prev => ({ ...prev, ...patch }))
   const selectedZone = bodyZones.find(z => z.id === form.zone)
   const minDate = getMinDate()
 
   const validateContact = (): boolean => {
-    const newErrors: { email?: string; phone?: string } = {}
+    const newErrors: typeof errors = {}
+    if (!form.name.trim()) newErrors.name = 'Campo requerido'
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
     if (!emailOk) newErrors.email = tr.form.emailError
     if (form.phone.trim() && !/^[0-9\s\+\-\(\)]{7,20}$/.test(form.phone.trim())) {
       newErrors.phone = tr.form.phoneError
     }
-    setErrors(newErrors)
+    setErrors(prev => ({ ...prev, ...newErrors }))
     return Object.keys(newErrors).length === 0
   }
 
@@ -123,7 +120,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
   }
 
   return (
-    <div className={shake ? 'ls-form-shake' : ''}>
+    <div>
       {/* Instrucciones antes del form */}
       {step === 0 && (
         <div style={{ marginBottom: '40px', padding: '28px 32px', background: '#fff', border: '1px solid #e8e8e8' }}>
@@ -193,10 +190,14 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 type="button"
                 className="ls-btn-primary"
                 style={{ width: '100%', justifyContent: 'center' }}
-                onClick={() => form.artist ? setStep(1) : triggerShake()}
+                onClick={() => {
+                  if (form.artist) { clearError('artist'); setStep(1) }
+                  else setErrors(prev => ({ ...prev, artist: 'Selecciona un artista' }))
+                }}
               >
                 {tr.form.continue}
               </button>
+              {errors.artist && <p style={{ fontSize: '12px', color: '#c0392b', marginTop: '8px', letterSpacing: '0.02em' }}>{errors.artist}</p>}
             </>
           )}
         </div>
@@ -206,35 +207,38 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
       {step === 1 && (
         <div>
           <div className="ls-section-label" style={{ marginBottom: '16px' }}>{tr.form.placement}</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '28px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '8px' }}>
             {bodyZones.map(zone => (
               <button
                 key={zone.id}
                 type="button"
                 className={`ls-artist-btn ${form.zone === zone.id ? 'active' : ''}`}
-                onClick={() => set({ zone: zone.id, size: '' })}
+                onClick={() => { set({ zone: zone.id, size: '' }); clearError('zone'); clearError('size') }}
               >
                 {zone.label[locale]}
               </button>
             ))}
           </div>
+          {errors.zone && <p style={{ fontSize: '12px', color: '#c0392b', marginBottom: '16px', letterSpacing: '0.02em' }}>{errors.zone}</p>}
+          {!errors.zone && <div style={{ marginBottom: '20px' }} />}
 
           {selectedZone && (
             <>
               <div className="ls-section-label" style={{ marginBottom: '12px' }}>{tr.form.size}</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
                 {selectedZone.sizes.map(s => (
                   <button
                     key={s}
                     type="button"
                     className={`ls-artist-btn ${form.size === s ? 'active' : ''}`}
                     style={{ flex: 'none' }}
-                    onClick={() => set({ size: s })}
+                    onClick={() => { set({ size: s }); clearError('size') }}
                   >
                     {s}
                   </button>
                 ))}
               </div>
+              {errors.size && <p style={{ fontSize: '12px', color: '#c0392b', marginBottom: '16px', letterSpacing: '0.02em' }}>{errors.size}</p>}
             </>
           )}
 
@@ -278,7 +282,13 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               type="button"
               className="ls-btn-primary"
               style={{ flex: 1, justifyContent: 'center' }}
-              onClick={() => (form.zone && form.size) ? setStep(2) : triggerShake()}
+              onClick={() => {
+                const e: typeof errors = {}
+                if (!form.zone) e.zone = 'Selecciona una zona'
+                if (form.zone && !form.size) e.size = 'Selecciona un tamaño'
+                if (Object.keys(e).length) setErrors(prev => ({ ...prev, ...e }))
+                else setStep(2)
+              }}
             >
               {tr.form.continue}
             </button>
@@ -295,9 +305,10 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               required
               value={form.description}
               placeholder={tr.form.describePlaceholder}
-              onChange={e => set({ description: e.target.value })}
-              style={{ height: '120px' }}
+              onChange={e => { set({ description: e.target.value }); clearError('description') }}
+              style={{ height: '120px', borderBottomColor: errors.description ? '#c0392b' : undefined }}
             />
+            {errors.description && <p style={{ fontSize: '12px', color: '#c0392b', marginTop: '6px', letterSpacing: '0.02em' }}>{errors.description}</p>}
           </div>
 
           {/* Reference photos */}
@@ -402,7 +413,10 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               type="button"
               className="ls-btn-primary"
               style={{ flex: 1, justifyContent: 'center' }}
-              onClick={() => form.description.trim() ? setStep(3) : triggerShake()}
+              onClick={() => {
+                if (form.description.trim()) { clearError('description'); setStep(3) }
+                else setErrors(prev => ({ ...prev, description: 'Describe tu idea' }))
+              }}
             >
               {tr.form.continue}
             </button>
@@ -420,8 +434,10 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 type="text"
                 required
                 value={form.name}
-                onChange={e => set({ name: e.target.value })}
+                style={{ borderBottomColor: errors.name ? '#c0392b' : undefined }}
+                onChange={e => { set({ name: e.target.value }); clearError('name') }}
               />
+              {errors.name && <p style={{ fontSize: '12px', color: '#c0392b', marginTop: '6px', letterSpacing: '0.02em' }}>{errors.name}</p>}
             </div>
             <div className="ls-form-group">
               <label>{tr.form.email}</label>
@@ -456,10 +472,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               className="ls-btn-primary"
               style={{ flex: 1, justifyContent: 'center' }}
               disabled={submitting}
-              onClick={() => {
-                if (!form.name.trim() || !form.email.trim()) { triggerShake(); return }
-                if (validateContact()) handleSubmit(); else triggerShake()
-              }}
+              onClick={() => { if (validateContact()) handleSubmit() }}
             >
               {submitting ? '...' : tr.form.submit}
             </button>
