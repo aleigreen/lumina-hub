@@ -291,7 +291,11 @@ export default function Artists({ locale }: { locale: Locale }) {
                 aria-label={isOpen ? 'Cerrar' : 'Abrir'}
                 onClick={e => { e.stopPropagation(); handleToggle(i) }}
               >
-                {isOpen ? '−' : '+'}
+                {isOpen ? (
+                  <svg width="14" height="2" viewBox="0 0 14 2" fill="none">
+                    <line x1="0" y1="1" x2="14" y2="1" stroke="#c8a872" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                ) : '+'}
               </button>
 
               <div className="ls-artist-bio-wrap ls-artist-bio-wrap-col">
