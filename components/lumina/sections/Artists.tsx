@@ -146,6 +146,16 @@ function ArtistCarousel({ name, isOpen }: { name: string; isOpen: boolean }) {
     setZoomed(false)
   }, [isOpen])
 
+  // Bloquea scroll del fondo cuando el lightbox está abierto
+  useEffect(() => {
+    if (zoomed) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [zoomed])
+
   useEffect(() => {
     if (zoomed || !isOpen) return
     timerRef.current = setTimeout(() => goTo(current + 1), 4000)
