@@ -62,7 +62,7 @@ export const artists: ArtistData[] = [
     },
   },
   {
-    name: 'Connyyink',
+    name: 'Connyink',
     ig: '@connying',
     whatsapp: null,
     role: {
@@ -70,12 +70,29 @@ export const artists: ArtistData[] = [
       es: 'Artista Residente',
     },
     styles: {
-      en: 'Realism · Micro-realism',
-      es: 'Realismo · Microrealismo',
+      en: 'Full color · Realism · Micro-realism',
+      es: 'Full color · Realismo · Microrealismo',
     },
     bio: {
-      en: 'Realism and micro-realism specialist. Precision and detail in every piece.',
-      es: 'Especialista en realismo y microrealismo. Precisión y detalle en cada pieza.',
+      en: 'Tattoo artist from CDMX with 8 years of experience. Throughout her career she has developed a solid visual identity, characterized by attention to small details and focused on a full color, realistic aesthetic.',
+      es: 'Tatuadora de CDMX con 8 años de experiencia. A lo largo de su trayectoria ha desarrollado una identidad visual sólida, caracterizada por la atención a los pequeños detalles, enfocada en una estética full color y realista.',
+    },
+  },
+  {
+    name: 'Danz',
+    ig: '@danz.zo',
+    whatsapp: null,
+    role: {
+      en: 'Resident Artist',
+      es: 'Artista Residente',
+    },
+    styles: {
+      en: 'Blackwork · Dark illustration · Gothic · Spooky cute · Horror · Emo',
+      es: 'Blackwork · Ilustración oscura · Gótico · Spooky cute · Horror · Emo',
+    },
+    bio: {
+      en: 'Our newest resident. Her signature: blackwork and dark illustration — gothic, spooky cute, and nods to horror and emo culture. The darker, the better.',
+      es: 'Nuestra nueva residente. Su sello: blackwork e ilustración oscura — gótico, spooky cute y guiños al horror y la cultura emo. The darker, the better.',
     },
   },
 ]

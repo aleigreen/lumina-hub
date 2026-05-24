@@ -7,6 +7,7 @@ export const t = {
       artists: 'Artists',
       book: 'Book',
       faq: 'FAQ',
+      values: 'Our Values',
     },
     hero: {
       eyebrow: 'Tattoo Studio · Condesa, Mexico City',
@@ -119,6 +120,7 @@ export const t = {
       artists: 'Artistas',
       book: 'Proyecto',
       faq: 'FAQ',
+      values: 'Nuestros Valores',
     },
     hero: {
       eyebrow: 'Estudio de Tatuaje · Condesa, Ciudad de México',

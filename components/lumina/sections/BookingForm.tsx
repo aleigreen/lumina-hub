@@ -78,64 +78,32 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
     e.target.value = ''
   }
 
-  const uploadPhoto = async (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    supabase: any,
-    file: File,
-    path: string
-  ): Promise<string | null> => {
-    const { error } = await supabase.storage
-      .from('appointment-photos')
-      .upload(path, file, { upsert: false })
-    if (error) { console.error('Upload error:', error.message); return null }
-    return path
-  }
+  const [submitting, setSubmitting] = useState(false)
 
   const handleSubmit = async () => {
-    const { createClient } = await import('@supabase/supabase-js')
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
+    setSubmitting(true)
+    try {
+      const fd = new FormData()
+      fd.append('artist', form.hasArtist ? form.artist : 'Sin preferencia')
+      fd.append('name', form.name)
+      fd.append('email', form.email)
+      fd.append('phone', form.phone)
+      fd.append('zone', form.zone)
+      fd.append('size', form.size)
+      fd.append('description', form.description)
+      fd.append('date', form.date)
+      if (zonePhoto) fd.append('zonePhoto', zonePhoto)
+      refPhotos.forEach(f => fd.append('refPhotos', f))
 
-    const ts = Date.now()
-    const sanitizedName = form.name.trim().toLowerCase().replace(/\s+/g, '-')
-    const folder = `${ts}-${sanitizedName}`
-
-    const refUrls: string[] = []
-    for (let i = 0; i < refPhotos.length; i++) {
-      const ext = refPhotos[i].name.split('.').pop()
-      const url = await uploadPhoto(supabase, refPhotos[i], `${folder}/ref-${i + 1}.${ext}`)
-      if (url) refUrls.push(url)
-    }
-
-    let zoneUrl: string | null = null
-    if (zonePhoto) {
-      const ext = zonePhoto.name.split('.').pop()
-      zoneUrl = await uploadPhoto(supabase, zonePhoto, `${folder}/zone.${ext}`)
-    }
-
-    const artistLabel = form.hasArtist ? form.artist : null
-    const { error } = await supabase.from('appointments').insert([{
-      client_name: form.name,
-      client_email: form.email,
-      client_phone: form.phone,
-      artist: artistLabel,
-      has_specific_artist: form.hasArtist ?? false,
-      zone: form.zone,
-      size: form.size,
-      idea: form.description,
-      preferred_date: form.date || null,
-      ref_photos: refUrls.length > 0 ? refUrls : null,
-      zone_photo: zoneUrl,
-      time: '00:00',
-      status: 'pending',
-    }])
-
-    if (!error) setSubmitted(true)
-    else {
-      console.error('Supabase error:', error)
-      alert(`Error: ${error.message}`)
+      const res = await fetch('/api/booking', { method: 'POST', body: fd })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error ?? 'Error al enviar')
+      setSubmitted(true)
+    } catch (err) {
+      console.error(err)
+      alert('Hubo un error al enviar tu solicitud. Intenta de nuevo.')
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -484,10 +452,10 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               type="button"
               className="ls-btn-primary"
               style={{ flex: 1, justifyContent: 'center' }}
-              disabled={!form.name.trim() || !form.email.trim()}
+              disabled={!form.name.trim() || !form.email.trim() || submitting}
               onClick={() => { if (validateContact()) handleSubmit() }}
             >
-              {tr.form.submit}
+              {submitting ? '...' : tr.form.submit}
             </button>
           </div>
         </div>

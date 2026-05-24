@@ -12,9 +12,10 @@ import PaymentBadges from './ui/PaymentBadges'
 import { t, type Locale } from './data/translations'
 
 export default function LuminaHome() {
-  const [selectedArtist, setSelectedArtist] = useState('')
+
   const [locale, setLocale] = useState<Locale>('es')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [valoresOpen, setValoresOpen] = useState(false)
 
   return (
     <main style={{ background: '#0d0a07', color: '#e8dfcf', minHeight: '100vh' }}>
@@ -175,6 +176,11 @@ export default function LuminaHome() {
           font-family: 'JetBrains Mono', monospace;
           font-size: 11px; letter-spacing: 0.24em; color: #c8a872; padding-top: 6px;
         }
+        .ls-artist-carousel { width: 220px; height: auto; aspect-ratio: 9/16; }
+        .ls-artist-row-header {
+          display: contents;
+        }
+        .ls-artist-toggle { display: none; }
         .ls-artist-name-wrap {}
         .ls-artist-name {
           font-family: 'Bodoni Moda', serif;
@@ -190,9 +196,10 @@ export default function LuminaHome() {
         }
         .ls-artist-bio-wrap {
           max-height: 0; overflow: hidden; opacity: 0;
-          transition: max-height 0.5s ease, opacity 0.3s ease;
+          transition: max-height 0.6s ease, opacity 0.3s ease;
+          display: flex; flex-direction: row; gap: 24px; align-items: flex-start;
         }
-        .ls-artist-row.open .ls-artist-bio-wrap { max-height: 320px; opacity: 1; }
+        .ls-artist-row.open .ls-artist-bio-wrap { max-height: 800px; opacity: 1; }
         .ls-artist-bio {
           font-family: 'Bodoni Moda', serif;
           font-size: 16px; color: #c9bfa9; line-height: 1.7; padding-top: 4px;
@@ -205,8 +212,8 @@ export default function LuminaHome() {
         }
         .ls-artist-ig-link {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 10px; letter-spacing: 0.14em; color: #c8a872;
-          text-decoration: none; display: block; margin-top: 8px;
+          font-size: 13px; letter-spacing: 0.10em; color: #c8a872;
+          text-decoration: none; display: block; margin-top: 10px;
           transition: color 0.2s;
         }
         .ls-artist-ig-link:hover { color: #e3c48a; }
@@ -318,12 +325,17 @@ export default function LuminaHome() {
         }
 
         /* ── PAYMENT CHIPS ── */
-        .ls-payments { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+        .ls-payments { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; align-items: center; }
         .ls-payment-chip {
-          padding: 6px 10px; border: 1px solid rgba(232,219,196,0.15);
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #c9bfa9;
+          padding: 8px 14px;
+          background: #e8dfcf;
+          display: flex; align-items: center; justify-content: center;
+          border-radius: 4px;
+          height: 36px;
+          opacity: 0.92;
+          transition: opacity 0.2s;
         }
+        .ls-payment-chip:hover { opacity: 1; }
 
         /* ── SUCCESS ── */
         .ls-success { text-align: center; padding: 80px 40px; }
@@ -422,6 +434,21 @@ export default function LuminaHome() {
         .ls-mobile-menu a:hover, .ls-mobile-menu button:hover { color: #c8a872; }
 
         /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+          .ls-artist-row { grid-template-columns: 44px 1fr; gap: 12px; }
+          .ls-artist-row.open { display: flex; flex-direction: column; padding: 24px 20px; background: #15110c; gap: 16px; }
+          .ls-artist-row.open .ls-artist-counter { display: none; }
+          .ls-artist-row.open .ls-artist-name-wrap { order: 1; }
+          .ls-artist-bio-wrap-col { display: none; }
+          .ls-artist-row.open .ls-artist-bio-wrap-col { display: flex !important; flex-direction: column !important; gap: 20px; order: 2; }
+          .ls-artist-row.open .ls-artist-bio-wrap { max-height: 2000px !important; opacity: 1 !important; flex-direction: column !important; }
+          .ls-artist-row.open .ls-artist-tags-col { display: block; text-align: left !important; margin-top: 4px; order: 3; }
+          .ls-artist-tags-col { display: none; }
+          .ls-artist-row.open .ls-artist-tags-col { display: block; text-align: left !important; margin-top: 4px; }
+          .ls-artist-tags-wrap { text-align: left !important; }
+          .ls-artist-carousel { width: 100% !important; height: auto !important; }
+        }
+
         @media (max-width: 768px) {
           .ls-nav { padding: 16px 20px; }
           .ls-nav-links { display: none; }
@@ -435,18 +462,73 @@ export default function LuminaHome() {
           .ls-section { padding: 64px 24px; }
           .ls-section-title { font-size: clamp(32px, 8vw, 56px); margin-bottom: 36px; }
 
+          /* Studio */
           .ls-studio-grid { grid-template-columns: 1fr; }
           .ls-studio-sub { height: 260px; }
           .ls-studio-text { padding: 28px 24px; }
+          .ls-studio-text p { font-size: 15px; line-height: 1.7; }
+          .ls-identity-grid { grid-template-columns: 1fr !important; }
 
-          .ls-artist-row { grid-template-columns: 40px 1fr; gap: 12px; }
-          .ls-artist-bio-wrap-col { display: none; }
-          .ls-artist-tags-col { display: none; }
+          /* Safe Space */
+          .ls-safespace-section { padding: 48px 24px !important; }
+          .ls-safespace-grid { grid-template-columns: 1fr !important; }
 
+          /* Artists mobile */
+          .ls-artist-row {
+            display: flex !important; flex-direction: column !important;
+            gap: 0 !important; padding: 0 !important;
+          }
+          .ls-artist-row-header {
+            display: flex !important; align-items: center !important;
+            padding: 14px 16px !important; gap: 12px !important;
+            cursor: pointer; width: 100%;
+          }
+          .ls-artist-counter { flex-shrink: 0; font-size: 10px; }
+          .ls-artist-name-wrap { flex: 1; min-width: 0; }
+          .ls-artist-name { font-size: clamp(20px, 5.5vw, 32px) !important; }
+          .ls-artist-role-label { font-size: 9px; margin-top: 4px; }
+          .ls-artist-toggle {
+            display: flex !important; align-items: center !important; justify-content: center !important;
+            width: 32px; height: 32px; flex-shrink: 0;
+            background: none; border: 1px solid rgba(232,219,196,0.25);
+            border-radius: 50%;
+            color: #c8a872; font-size: 20px; cursor: pointer;
+            font-family: 'JetBrains Mono', monospace; line-height: 1;
+            transition: transform 0.3s;
+          }
+          .ls-artist-row.open .ls-artist-toggle { transform: rotate(45deg); }
+          .ls-artist-row.open { background: #15110c !important; }
+          .ls-artist-row.open .ls-artist-row-header { padding-bottom: 8px !important; border-bottom: 1px solid rgba(232,219,196,0.08); }
+          .ls-artist-bio-wrap-col { display: none !important; }
+          .ls-artist-row.open .ls-artist-bio-wrap-col {
+            display: flex !important; flex-direction: column !important;
+            gap: 16px; padding: 16px 16px 16px;
+          }
+          .ls-artist-bio-wrap {
+            max-height: none !important; opacity: 1 !important; overflow: visible !important;
+            flex-direction: column !important;
+          }
+          .ls-artist-tags-col { display: none !important; }
+          .ls-artist-row.open .ls-artist-tags-col { display: block !important; padding: 4px 16px 16px; text-align: left !important; }
+          .ls-artist-tags-wrap { text-align: left !important; }
+          .ls-artist-carousel {
+            width: 100% !important;
+            aspect-ratio: 4/5 !important;
+          }
+          .ls-artist-bio-wrap { gap: 16px !important; flex-direction: column !important; }
+          .ls-artist-row.open .ls-artist-bio-wrap-col { gap: 8px !important; padding: 12px 16px 4px !important; }
+          .ls-artist-bio { font-size: 14px !important; line-height: 1.6 !important; }
+
+          /* Booking */
           .ls-booking-grid { grid-template-columns: 1fr; gap: 40px; }
           .ls-form-card { padding: 28px 20px; }
           .ls-form-row { grid-template-columns: 1fr; }
 
+          /* Location */
+          .ls-location-section { padding: 64px 24px !important; }
+          .ls-location-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+
+          /* Footer */
           .ls-footer { padding: 48px 20px 24px; }
           .ls-footer-top { flex-direction: column; gap: 32px; }
           .ls-footer-info { text-align: left; }
@@ -456,6 +538,74 @@ export default function LuminaHome() {
         @media (max-width: 480px) {
           .ls-section { padding: 48px 16px; }
           .ls-hero { padding: 90px 16px 56px; }
+          .ls-location-section { padding: 48px 16px !important; }
+          .ls-safespace-grid { gap: 1px !important; }
+        }
+
+        /* ── VALORES MODAL ── */
+        .ls-modal-overlay {
+          position: fixed; inset: 0; z-index: 200;
+          background: rgba(13,10,7,0.7);
+          backdrop-filter: blur(6px);
+          display: flex; align-items: center; justify-content: center;
+          padding: 24px;
+          animation: ls-fade-in 0.25s ease;
+        }
+        @keyframes ls-fade-in { from { opacity: 0 } to { opacity: 1 } }
+        .ls-modal {
+          background: #15110c;
+          border: 1px solid rgba(232,219,196,0.10);
+          width: 100%; max-width: 900px;
+          max-height: 90vh; overflow-y: auto;
+          animation: ls-slide-up 0.3s ease;
+        }
+        @keyframes ls-slide-up { from { transform: translateY(24px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+        .ls-modal-header {
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 24px 40px;
+          border-bottom: 1px solid rgba(232,219,196,0.08);
+          position: sticky; top: 0; background: #15110c; z-index: 1;
+        }
+        .ls-modal-label {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; color: #c8a872;
+        }
+        .ls-modal-close {
+          background: none; border: none; cursor: pointer;
+          color: #c9bfa9; font-size: 22px; line-height: 1;
+          padding: 4px 8px; transition: color 0.2s;
+          font-family: 'JetBrains Mono', monospace;
+        }
+        .ls-modal-close:hover { color: #e8dfcf; }
+        .ls-modal-body {
+          display: grid; grid-template-columns: 1fr 1fr;
+          gap: 2px; background: rgba(232,219,196,0.06);
+          margin: 2px;
+        }
+        .ls-modal-card {
+          padding: 56px 48px;
+          background: #15110c;
+          display: flex; flex-direction: column; gap: 24px;
+        }
+        .ls-modal-card:nth-child(2) { background: #1a1410; }
+        .ls-modal-card-num {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; color: #c8a872;
+        }
+        .ls-modal-divider { width: 32px; height: 1px; background: rgba(200,168,114,0.3); }
+        .ls-modal-card-title {
+          font-family: 'Bodoni Moda', serif;
+          font-size: clamp(24px, 3vw, 40px); font-weight: 300; font-style: italic;
+          color: #e8dfcf; line-height: 1.1;
+        }
+        .ls-modal-card-body {
+          font-family: 'Bodoni Moda', serif;
+          font-size: 16px; color: #c9bfa9; line-height: 1.9; font-weight: 300;
+        }
+        @media (max-width: 640px) {
+          .ls-modal-header { padding: 20px 24px; }
+          .ls-modal-body { grid-template-columns: 1fr; }
+          .ls-modal-card { padding: 40px 24px; }
         }
       `}</style>
 
@@ -473,6 +623,7 @@ export default function LuminaHome() {
           <a href="#artists">{t[locale].nav.artists}</a>
           <a href="#book">{t[locale].nav.book}</a>
           <a href="#faq">{t[locale].nav.faq}</a>
+          <button onClick={() => setValoresOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', letterSpacing: '0.14em', color: '#c9bfa9', padding: 0, transition: 'color 0.2s' }} onMouseEnter={e => (e.currentTarget.style.color='#c8a872')} onMouseLeave={e => (e.currentTarget.style.color='#c9bfa9')}>{t[locale].nav.values}</button>
           <button
             onClick={() => setLocale(locale === 'en' ? 'es' : 'en')}
             style={{
@@ -508,9 +659,9 @@ export default function LuminaHome() {
       </div>
 
       <Hero locale={locale} />
-      <SafeSpace locale={locale} />
       <Studio locale={locale} />
-      <Artists selectedArtist={selectedArtist} onSelect={setSelectedArtist} locale={locale} />
+      <SafeSpace locale={locale} onValores={() => setValoresOpen(true)} />
+      <Artists locale={locale} />
 
       {/* BOOKING */}
       <section className="ls-section ls-booking" id="book">
@@ -527,7 +678,7 @@ export default function LuminaHome() {
             </div>
           </div>
           <div className="ls-form-card">
-            <BookingForm initialArtist={selectedArtist} locale={locale} />
+            <BookingForm initialArtist="" locale={locale} />
           </div>
         </div>
       </section>
@@ -545,14 +696,6 @@ export default function LuminaHome() {
               <div className="ls-footer-logo-sub">Sanctum</div>
             </div>
           </div>
-          <div className="ls-footer-info">
-            <div className="ls-footer-info-label">{t[locale].location.label}</div>
-            <div className="ls-footer-address">{t[locale].location.address}</div>
-            <div className="ls-footer-hours">
-              {t[locale].location.hoursDetail}<br />
-              {t[locale].location.hours}
-            </div>
-          </div>
         </div>
         <div className="ls-footer-bottom">
           <div className="ls-footer-copy">© MMXXVI · Lumina Sanctum</div>
@@ -562,6 +705,32 @@ export default function LuminaHome() {
           </div>
         </div>
       </footer>
+
+      {/* VALORES MODAL */}
+      {valoresOpen && (
+        <div className="ls-modal-overlay" onClick={() => setValoresOpen(false)}>
+          <div className="ls-modal" onClick={e => e.stopPropagation()}>
+            <div className="ls-modal-header">
+              <div className="ls-modal-label">{t[locale].nav.values}</div>
+              <button className="ls-modal-close" onClick={() => setValoresOpen(false)} aria-label="Cerrar">×</button>
+            </div>
+            <div className="ls-modal-body">
+              <div className="ls-modal-card">
+                <div className="ls-modal-card-num">01</div>
+                <div className="ls-modal-divider" />
+                <h2 className="ls-modal-card-title">{t[locale].identity.missionTitle}</h2>
+                <p className="ls-modal-card-body">{t[locale].identity.missionBody}</p>
+              </div>
+              <div className="ls-modal-card">
+                <div className="ls-modal-card-num">02</div>
+                <div className="ls-modal-divider" />
+                <h2 className="ls-modal-card-title">{t[locale].identity.visionTitle}</h2>
+                <p className="ls-modal-card-body">{t[locale].identity.visionBody}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
