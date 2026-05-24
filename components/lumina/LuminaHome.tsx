@@ -175,7 +175,7 @@ export default function LuminaHome() {
 
         /* ── ARTISTS (list) ── */
         .ls-artist-row {
-          display: grid; grid-template-columns: 60px 1.2fr 1.5fr 1fr;
+          display: grid; grid-template-columns: 1.2fr 1.5fr 1fr;
           align-items: start; padding: 32px 0;
           border-top: 1px solid rgba(232,219,196,0.10);
           cursor: pointer; transition: background 0.3s, padding 0.3s;

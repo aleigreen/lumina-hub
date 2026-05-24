@@ -279,7 +279,6 @@ export default function Artists({ locale }: { locale: Locale }) {
                 className="ls-artist-row-header"
                 onClick={() => handleToggle(i)}
               >
-                <div className="ls-artist-counter">{String(i + 1).padStart(2, '0')}</div>
                 <div className="ls-artist-name-wrap">
                   <div className="ls-artist-name">{artist.name}</div>
                   <div className="ls-artist-role-label">{artist.role[locale]}</div>
