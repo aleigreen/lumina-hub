@@ -116,9 +116,11 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
   }
 
   const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState(false)
 
   const handleSubmit = async () => {
     setSubmitting(true)
+    setSubmitError(false)
     try {
       const fd = new FormData()
       fd.append('artist', form.hasArtist ? form.artist : 'Sin preferencia')
@@ -138,7 +140,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
       setSubmitted(true)
     } catch (err) {
       console.error(err)
-      alert('Hubo un error al enviar tu solicitud. Intenta de nuevo.')
+      setSubmitError(true)
     } finally {
       setSubmitting(false)
     }
@@ -146,9 +148,46 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
 
   if (submitted) {
     return (
-      <div className="ls-success">
-        <h3>{tr.success.title}</h3>
-        <p>{tr.success.body}</p>
+      <div style={{ padding: '40px 24px', textAlign: 'center' }}>
+        <div style={{ fontSize: '32px', marginBottom: '16px' }}>✦</div>
+        <h3 style={{ fontFamily: "'Bodoni Moda', serif", fontSize: '24px', fontWeight: 300, fontStyle: 'italic', color: '#c8a872', marginBottom: '16px' }}>
+          {tr.success.title}
+        </h3>
+        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: '#c9bfa9', lineHeight: 1.8 }}>
+          {tr.success.body}
+        </p>
+      </div>
+    )
+  }
+
+  if (submitError) {
+    return (
+      <div style={{ padding: '40px 24px', textAlign: 'center' }}>
+        <div style={{ fontSize: '28px', marginBottom: '16px', color: '#c0392b' }}>✕</div>
+        <h3 style={{ fontFamily: "'Bodoni Moda', serif", fontSize: '22px', fontWeight: 300, fontStyle: 'italic', color: '#e8dfcf', marginBottom: '16px' }}>
+          Algo salió mal
+        </h3>
+        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: '#c9bfa9', lineHeight: 1.8, marginBottom: '24px' }}>
+          Lo sentimos, hubo un problema al enviar tu solicitud.{'\n'}
+          Por favor escríbenos directamente por Instagram y con gusto te atendemos.
+        </p>
+        <a
+          href="https://instagram.com/luminasanctum.tattoo"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', border: '1px solid #c8a872', color: '#c8a872', fontFamily: "'Inter', sans-serif", fontSize: '13px', letterSpacing: '0.08em', textDecoration: 'none', transition: 'background 0.2s' }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+          @luminasanctum.tattoo
+        </a>
+        <div style={{ marginTop: '20px' }}>
+          <button
+            onClick={() => setSubmitError(false)}
+            style={{ background: 'none', border: 'none', color: '#888', fontFamily: "'Inter', sans-serif", fontSize: '12px', cursor: 'pointer', letterSpacing: '0.08em', textDecoration: 'underline' }}
+          >
+            Intentar de nuevo
+          </button>
+        </div>
       </div>
     )
   }
@@ -511,7 +550,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               disabled={submitting}
               onClick={() => { if (validateContact()) handleSubmit() }}
             >
-              {submitting ? '...' : tr.form.submit}
+              {submitting ? 'Enviando...' : tr.form.submit}
             </button>
           </div>
         </div>
