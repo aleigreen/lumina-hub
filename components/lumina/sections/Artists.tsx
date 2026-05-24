@@ -288,7 +288,7 @@ export default function Artists({ locale }: { locale: Locale }) {
                   aria-label={isOpen ? 'Cerrar' : 'Abrir'}
                   onClick={e => { e.stopPropagation(); handleToggle(i) }}
                 >
-                  {isOpen ? '×' : '+'}
+                  {isOpen ? '−' : '+'}
                 </button>
               </div>
 
