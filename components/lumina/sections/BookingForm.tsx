@@ -81,6 +81,29 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
     e.target.value = ''
   }
 
+  const compressImage = (file: File, maxSizeKB = 800): Promise<File> => {
+    return new Promise(resolve => {
+      if (file.size <= maxSizeKB * 1024) { resolve(file); return }
+      const img = new Image()
+      const url = URL.createObjectURL(file)
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        let { width, height } = img
+        const scale = Math.sqrt((maxSizeKB * 1024) / file.size)
+        width = Math.round(width * scale)
+        height = Math.round(height * scale)
+        canvas.width = width
+        canvas.height = height
+        canvas.getContext('2d')!.drawImage(img, 0, 0, width, height)
+        canvas.toBlob(blob => {
+          URL.revokeObjectURL(url)
+          resolve(blob ? new File([blob], file.name, { type: 'image/jpeg' }) : file)
+        }, 'image/jpeg', 0.82)
+      }
+      img.src = url
+    })
+  }
+
   const [submitting, setSubmitting] = useState(false)
 
   const handleSubmit = async () => {
@@ -95,8 +118,8 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
       fd.append('size', form.size)
       fd.append('description', form.description)
       fd.append('date', form.date)
-      if (zonePhoto) fd.append('zonePhoto', zonePhoto)
-      refPhotos.forEach(f => fd.append('refPhotos', f))
+      if (zonePhoto) fd.append('zonePhoto', await compressImage(zonePhoto))
+      for (const f of refPhotos) fd.append('refPhotos', await compressImage(f))
 
       const res = await fetch('/api/booking', { method: 'POST', body: fd })
       const json = await res.json()
@@ -402,7 +425,10 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                   : tr.form.datePlaceholder}
               </div>
             </div>
-            <p style={{ fontSize: '13px', color: '#666', lineHeight: 1.8, marginTop: '10px', letterSpacing: '0.02em' }}>
+            <p style={{ fontSize: '12px', color: '#c8a872', lineHeight: 1.7, marginTop: '10px', letterSpacing: '0.02em' }}>
+              Solo disponibles fechas a partir del {new Date(minDate + 'T00:00:00').toLocaleDateString(locale === 'es' ? 'es-MX' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+            </p>
+            <p style={{ fontSize: '12px', color: '#888', lineHeight: 1.7, marginTop: '4px', letterSpacing: '0.02em' }}>
               {tr.form.dateDisclaimer}
             </p>
           </div>
