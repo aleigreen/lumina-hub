@@ -47,11 +47,22 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
   const [refPhotos, setRefPhotos] = useState<File[]>([])
   const [zonePhoto, setZonePhoto] = useState<File | null>(null)
   const [errors, setErrors] = useState<{ email?: string; phone?: string; artist?: string; zone?: string; size?: string; description?: string; name?: string }>({})
+  const formRef = useRef<HTMLDivElement>(null)
   const refInputRef = useRef<HTMLInputElement>(null)
   const zoneInputRef = useRef<HTMLInputElement>(null)
   const dateInputRef = useRef<HTMLInputElement>(null)
 
   const clearError = (field: string) => setErrors(prev => ({ ...prev, [field]: undefined }))
+
+  const goToStep = (n: number) => {
+    setStep(n)
+    setTimeout(() => {
+      const el = formRef.current
+      if (!el) return
+      const top = el.getBoundingClientRect().top + window.scrollY - 80
+      window.scrollTo({ top, behavior: 'smooth' })
+    }, 50)
+  }
 
   const set = (patch: Partial<FormData>) => setForm(prev => ({ ...prev, ...patch }))
   const selectedZone = bodyZones.find(z => z.id === form.zone)
@@ -143,7 +154,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
   }
 
   return (
-    <div>
+    <div ref={formRef}>
       {/* Instrucciones antes del form */}
       {step === 0 && (
         <div style={{ marginBottom: '40px', padding: '28px 32px', background: '#fff', border: '1px solid #e8e8e8' }}>
@@ -188,7 +199,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
               type="button"
               className={`ls-artist-btn ${form.hasArtist === false ? 'active' : ''}`}
               style={{ flex: 1, padding: '16px' }}
-              onClick={() => { set({ hasArtist: false, artist: '' }); setStep(1) }}
+              onClick={() => { set({ hasArtist: false, artist: '' }); goToStep(1) }}
             >
               {tr.form.studioDecides}
             </button>
@@ -214,7 +225,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 className="ls-btn-primary"
                 style={{ width: '100%', justifyContent: 'center' }}
                 onClick={() => {
-                  if (form.artist) { clearError('artist'); setStep(1) }
+                  if (form.artist) { clearError('artist'); goToStep(1) }
                   else setErrors(prev => ({ ...prev, artist: 'Selecciona un artista' }))
                 }}
               >
@@ -300,7 +311,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
           </div>
 
           <div style={{ display: 'flex', gap: '12px' }}>
-            <button type="button" className="ls-btn-outline" onClick={() => setStep(0)}>{tr.form.back}</button>
+            <button type="button" className="ls-btn-outline" onClick={() => goToStep(0)}>{tr.form.back}</button>
             <button
               type="button"
               className="ls-btn-primary"
@@ -310,7 +321,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 if (!form.zone) e.zone = 'Selecciona una zona'
                 if (form.zone && !form.size) e.size = 'Selecciona un tamaño'
                 if (Object.keys(e).length) setErrors(prev => ({ ...prev, ...e }))
-                else setStep(2)
+                else goToStep(2)
               }}
             >
               {tr.form.continue}
@@ -434,13 +445,13 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
           </div>
 
           <div style={{ display: 'flex', gap: '12px' }}>
-            <button type="button" className="ls-btn-outline" onClick={() => setStep(1)}>{tr.form.back}</button>
+            <button type="button" className="ls-btn-outline" onClick={() => goToStep(1)}>{tr.form.back}</button>
             <button
               type="button"
               className="ls-btn-primary"
               style={{ flex: 1, justifyContent: 'center' }}
               onClick={() => {
-                if (form.description.trim()) { clearError('description'); setStep(3) }
+                if (form.description.trim()) { clearError('description'); goToStep(3) }
                 else setErrors(prev => ({ ...prev, description: 'Describe tu idea' }))
               }}
             >
@@ -492,7 +503,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
             )}
           </div>
           <div style={{ display: 'flex', gap: '12px' }}>
-            <button type="button" className="ls-btn-outline" onClick={() => setStep(2)}>{tr.form.back}</button>
+            <button type="button" className="ls-btn-outline" onClick={() => goToStep(2)}>{tr.form.back}</button>
             <button
               type="button"
               className="ls-btn-primary"
