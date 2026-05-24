@@ -273,6 +273,7 @@ export default function Artists({ locale }: { locale: Locale }) {
               ref={el => { rowRefs.current[i] = el }}
               className={`ls-artist-row${isOpen ? ' open' : ''}`}
               onMouseEnter={() => { if (window.innerWidth >= 1025) setOpenIndex(i) }}
+              style={{ position: 'relative' }}
             >
               {/* Header — siempre visible, click abre/cierra */}
               <div
@@ -283,14 +284,15 @@ export default function Artists({ locale }: { locale: Locale }) {
                   <div className="ls-artist-name">{artist.name}</div>
                   <div className="ls-artist-role-label">{artist.role[locale]}</div>
                 </div>
-                <button
-                  className="ls-artist-toggle"
-                  aria-label={isOpen ? 'Cerrar' : 'Abrir'}
-                  onClick={e => { e.stopPropagation(); handleToggle(i) }}
-                >
-                  {isOpen ? '−' : '+'}
-                </button>
               </div>
+
+              <button
+                className="ls-artist-toggle"
+                aria-label={isOpen ? 'Cerrar' : 'Abrir'}
+                onClick={e => { e.stopPropagation(); handleToggle(i) }}
+              >
+                {isOpen ? '−' : '+'}
+              </button>
 
               <div className="ls-artist-bio-wrap ls-artist-bio-wrap-col">
                 <ArtistCarousel name={artist.name} isOpen={isOpen} />

@@ -191,7 +191,7 @@ export default function LuminaHome() {
         .ls-artist-row-header {
           display: contents;
         }
-        .ls-artist-toggle { display: none; }
+        .ls-artist-toggle { display: none; position: absolute; top: 14px; right: 16px; }
         .ls-artist-name-wrap {}
         .ls-artist-name {
           font-family: 'Bodoni Moda', serif;
@@ -500,7 +500,7 @@ export default function LuminaHome() {
           .ls-artist-role-label { font-size: 9px; margin-top: 4px; }
           .ls-artist-toggle {
             display: flex !important; align-items: center !important; justify-content: center !important;
-            width: 32px; height: 32px; flex-shrink: 0; margin-left: auto;
+            width: 32px; height: 32px; flex-shrink: 0;
             background: none; border: 1px solid rgba(232,219,196,0.25);
             border-radius: 50%;
             color: #c8a872; font-size: 20px; cursor: pointer;
