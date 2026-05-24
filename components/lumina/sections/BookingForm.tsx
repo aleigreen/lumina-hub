@@ -380,7 +380,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 borderBottom: '1px solid #ddd', padding: '10px 0',
                 cursor: 'pointer', pointerEvents: 'none',
                 fontSize: '14px', letterSpacing: '0.02em',
-                color: form.date ? '#111' : '#888',
+                color: form.date ? '#e8dfcf' : '#888',
                 fontFamily: 'Jost, sans-serif',
               }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
