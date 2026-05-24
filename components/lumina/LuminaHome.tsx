@@ -466,7 +466,7 @@ export default function LuminaHome() {
           .ls-hamburger { display: flex; }
           .ls-nav-logo-wordmark--desktop { display: none; }
 
-          .ls-hero { padding: 100px 24px 64px; min-height: 100svh; }
+          .ls-hero { padding: clamp(72px, 12svh, 100px) 24px clamp(48px, 8svh, 64px); min-height: 100svh; }
           .ls-hero-eyebrow { font-size: 10px; }
           .ls-hero-cta { flex-direction: column; gap: 10px; max-width: 320px; margin: 0 auto; }
 
@@ -548,7 +548,7 @@ export default function LuminaHome() {
 
         @media (max-width: 480px) {
           .ls-section { padding: 48px 16px; }
-          .ls-hero { padding: 90px 16px 56px; }
+          .ls-hero { padding: clamp(60px, 10svh, 90px) 16px clamp(40px, 7svh, 56px); }
           .ls-location-section { padding: 48px 16px !important; }
           .ls-safespace-grid { gap: 1px !important; }
         }
