@@ -292,8 +292,8 @@ export default function Artists({ locale }: { locale: Locale }) {
                 onClick={e => { e.stopPropagation(); handleToggle(i) }}
               >
                 {isOpen ? (
-                  <svg width="14" height="2" viewBox="0 0 14 2" fill="none">
-                    <line x1="0" y1="1" x2="14" y2="1" stroke="#c8a872" strokeWidth="1.5" strokeLinecap="round"/>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ display: 'block' }}>
+                    <line x1="2" y1="7" x2="12" y2="7" stroke="#c8a872" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 ) : '+'}
               </button>

@@ -507,7 +507,7 @@ export default function LuminaHome() {
             font-family: 'JetBrains Mono', monospace; line-height: 1;
             transition: transform 0.3s;
           }
-          .ls-artist-row.open .ls-artist-toggle { transform: rotate(45deg); }
+          .ls-artist-row.open .ls-artist-toggle { transform: none; }
           .ls-artist-row.open { background: #15110c !important; }
           .ls-artist-row.open .ls-artist-row-header { padding-bottom: 8px !important; border-bottom: 1px solid rgba(232,219,196,0.08); }
           .ls-artist-bio-wrap-col { display: none !important; }
