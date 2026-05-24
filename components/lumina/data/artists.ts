@@ -15,8 +15,8 @@ export const artists: ArtistData[] = [
     ig: '@cesarxsepulveda',
     whatsapp: 'https://wa.me/521XXXXXXXXXX',
     role: {
-      en: 'Owner · Resident Artist',
-      es: 'Dueño · Artista Residente',
+      en: 'Founder · Resident Artist',
+      es: 'Fundador · Artista Residente',
     },
     styles: {
       en: 'Neo-gothic · Anime · Fine line · Mixed technique',
