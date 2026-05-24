@@ -4,7 +4,7 @@ import { Resend } from 'resend'
 export const config = { api: { bodyParser: false } }
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const TO = 'luminasanctum@gmail.com'
+const TO = 'aleishavg@gmail.com'
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData()
