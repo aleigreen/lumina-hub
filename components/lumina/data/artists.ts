@@ -46,7 +46,7 @@ export const artists: ArtistData[] = [
   },
   {
     name: 'Morgana Andre',
-    ig: 'morgana.andre',
+    ig: '@morgana.andre',
     whatsapp: null,
     role: {
       en: 'Resident Artist',
@@ -63,7 +63,7 @@ export const artists: ArtistData[] = [
   },
   {
     name: 'Connyink',
-    ig: '@connying',
+    ig: '@connyink',
     whatsapp: null,
     role: {
       en: 'Resident Artist',
