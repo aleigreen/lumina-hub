@@ -4,7 +4,15 @@ import { Resend } from 'resend'
 export const config = { api: { bodyParser: false } }
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const TO = 'aleishavg@gmail.com'
+const TO = 'luminasanctum@gmail.com'
+
+const ARTIST_EMAILS: Record<string, string> = {
+  'César': 'cesarxsepulveda@gmail.com',
+  'Meri': 'meri.tattooer@gmail.com',
+  'Morgana Andre': 'morganatalavera2@gmail.com',
+  'Connyink': 'victoriaolivo.conny@gmail.com',
+  'Danz': 'danielamm.art@gmail.com',
+}
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData()
@@ -65,9 +73,15 @@ export async function POST(req: NextRequest) {
 </div>
 `
 
+  const cc: string[] = []
+  const artistEmail = ARTIST_EMAILS[artist]
+  if (artistEmail) cc.push(artistEmail)
+  if (email && email.trim()) cc.push(email.trim())
+
   const { error } = await resend.emails.send({
     from: 'Lumina Sanctum <onboarding@resend.dev>',
     to: TO,
+    cc: cc.length > 0 ? cc : undefined,
     replyTo: email,
     subject,
     html,
