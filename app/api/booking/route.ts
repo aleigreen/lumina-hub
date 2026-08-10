@@ -4,7 +4,9 @@ import { Resend } from 'resend'
 export const config = { api: { bodyParser: false } }
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const TO = 'luminasanctum@gmail.com'
+// TEMP: usando onboarding@resend.dev (sandbox), que solo puede enviar a este correo.
+// Cuando luminasanctum.com esté verificado en Resend, volver a TO='luminasanctum@gmail.com' y reactivar el CC.
+const TO = 'aleishavg@gmail.com'
 
 const ARTIST_EMAILS: Record<string, string> = {
   'César': 'cesarxsepulveda@gmail.com',
@@ -73,15 +75,16 @@ export async function POST(req: NextRequest) {
 </div>
 `
 
-  const cc: string[] = []
-  const artistEmail = ARTIST_EMAILS[artist]
-  if (artistEmail) cc.push(artistEmail)
-  if (email && email.trim()) cc.push(email.trim())
+  // TEMP: CC deshabilitado — el sandbox de Resend (onboarding@resend.dev) solo puede
+  // enviar/copiar al correo verificado (TO). Reactivar cuando el dominio esté verificado.
+  // const cc: string[] = []
+  // const artistEmail = ARTIST_EMAILS[artist]
+  // if (artistEmail) cc.push(artistEmail)
+  // if (email && email.trim()) cc.push(email.trim())
 
   const { error } = await resend.emails.send({
     from: 'Lumina Sanctum <onboarding@resend.dev>',
     to: TO,
-    cc: cc.length > 0 ? cc : undefined,
     replyTo: email,
     subject,
     html,
