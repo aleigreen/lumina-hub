@@ -46,7 +46,7 @@ function ArtistCarousel({ name, isOpen }: { name: string; isOpen: boolean }) {
   return (
     <>
       {/* Carousel */}
-      <div className="ls-artist-carousel" style={{ position: 'relative', flexShrink: 0, background: '#15110c', overflow: 'hidden' }}>
+      <div className="ls-artist-carousel relative shrink-0 overflow-hidden bg-crypt">
         {slides.map((slide, i) => {
           // Solo se montan la foto actual y sus vecinas (precarga de la siguiente).
           // Antes se montaban todas: hasta 55 fotos (≈50 MB) por artista.
@@ -54,19 +54,19 @@ function ArtistCarousel({ name, isOpen }: { name: string; isOpen: boolean }) {
           const near = isOpen && (i === current || i === (current + 1) % n || i === (current - 1 + n) % n)
           if (!near) return null
           return (
-          <div key={i} style={{ position: 'absolute', inset: 0, opacity: i === current ? 1 : 0, transition: 'opacity 0.5s ease' }}>
+          <div key={i} className={`absolute inset-0 transition-opacity duration-500 ease-[ease] ${i === current ? 'opacity-100' : 'opacity-0'}`}>
             {slide.src ? (
               <img
                 src={slide.src}
                 alt={`${name} ${i + 1}`}
                 onClick={e => { e.stopPropagation(); setZoomed(true) }}
-                style={{ width: '100%', height: '100%', objectFit: 'contain', cursor: 'zoom-in' }}
+                className="size-full cursor-zoom-in object-contain"
                 loading="lazy"
                 decoding="async"
               />
             ) : (
-              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontFamily: "var(--f-mono), monospace", fontSize: '9px', letterSpacing: '0.25em', color: 'rgba(232,219,196,0.18)', textTransform: 'uppercase' }}>0{i + 1}</span>
+              <div className="flex size-full items-center justify-center">
+                <span className="font-mono text-[9px] tracking-[0.25em] text-bone/18 uppercase">0{i + 1}</span>
               </div>
             )}
           </div>
@@ -78,7 +78,7 @@ function ArtistCarousel({ name, isOpen }: { name: string; isOpen: boolean }) {
         <button onClick={next} aria-label="Siguiente" className="lg-car-arrow lg-car-arrow--r"><ChevronRight size={18} strokeWidth={1.25} /></button>
 
         {/* Contador */}
-        <div style={{ position: 'absolute', bottom: '10px', right: '12px', zIndex: 2, fontFamily: "var(--f-mono), monospace", fontSize: '9px', letterSpacing: '0.2em', color: 'rgba(232,219,196,0.5)' }}>
+        <div className="absolute right-3 bottom-2.5 z-2 font-mono text-[9px] tracking-[0.2em] text-bone/50">
           {String(current + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
         </div>
 
@@ -89,7 +89,7 @@ function ArtistCarousel({ name, isOpen }: { name: string; isOpen: boolean }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={e => e.stopPropagation()}
-            style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 3, background: 'rgba(13,10,7,0.6)', backdropFilter: 'blur(4px)', borderRadius: '4px', padding: '6px 8px', display: 'flex', alignItems: 'center', gap: '5px', color: '#e8dfcf', textDecoration: 'none', fontFamily: "var(--f-mono), monospace", fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase' }}
+            className="absolute top-2.5 right-2.5 z-3 flex items-center gap-[5px] rounded-sm bg-ink/60 px-2 py-1.5 font-mono text-[9px] tracking-[0.15em] text-bone uppercase no-underline backdrop-blur-xs"
           >
             <InstagramIcon size={11} /> Ver post
           </a>
@@ -100,7 +100,7 @@ function ArtistCarousel({ name, isOpen }: { name: string; isOpen: boolean }) {
       {zoomed && currentSlide?.src && (
         <div
           onClick={e => { e.stopPropagation(); setZoomed(false) }}
-          style={{ position: 'fixed', inset: 0, zIndex: 500, background: 'rgba(13,10,7,0.92)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
+          className="fixed inset-0 z-500 flex items-center justify-center bg-ink/92 p-6"
         >
           <button onClick={e => { e.stopPropagation(); setZoomed(false) }} aria-label="Cerrar" className="lg-round-btn lg-lb-close"><X size={18} strokeWidth={1.25} /></button>
           <button onClick={e => { e.stopPropagation(); goTo(current - 1) }} aria-label="Anterior" className="lg-round-btn lg-lb-nav lg-lb-nav--l"><ChevronLeft size={20} strokeWidth={1.25} /></button>
@@ -108,11 +108,11 @@ function ArtistCarousel({ name, isOpen }: { name: string; isOpen: boolean }) {
             src={currentSlide.src}
             alt={`${name} zoom`}
             onClick={e => e.stopPropagation()}
-            style={{ maxWidth: '90vw', maxHeight: '90vh', objectFit: 'contain' }}
+            className="max-h-[90vh] max-w-[90vw] object-contain"
           />
           <button onClick={e => { e.stopPropagation(); goTo(current + 1) }} aria-label="Siguiente" className="lg-round-btn lg-lb-nav lg-lb-nav--r"><ChevronRight size={20} strokeWidth={1.25} /></button>
           {currentSlide.igUrl && (
-            <a href={currentSlide.igUrl} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{ position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(13,10,7,0.7)', borderRadius: '4px', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '6px', color: '#c8a872', textDecoration: 'none', fontFamily: "var(--f-mono), monospace", fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+            <a href={currentSlide.igUrl} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-sm bg-ink/70 px-3.5 py-2 font-mono text-[10px] tracking-[0.2em] text-gold uppercase no-underline">
               <InstagramIcon size={12} /> Ver post en Instagram
             </a>
           )}
@@ -161,8 +161,7 @@ export default function Artists({ locale }: { locale: Locale }) {
             <div
               key={artist.name}
               ref={el => { rowRefs.current[i] = el }}
-              className={`ls-artist-row${isOpen ? ' open' : ''}`}
-              style={{ position: 'relative' }}
+              className={`ls-artist-row relative${isOpen ? ' open' : ''}`}
             >
               {/* Header — siempre visible, click abre/cierra */}
               <div
@@ -199,12 +198,11 @@ export default function Artists({ locale }: { locale: Locale }) {
               <div className="ls-artist-tags-wrap ls-artist-tags-col">
                 <div className="ls-artist-tags">{artist.styles[locale]}</div>
                 <a
-                  className="ls-artist-ig-link"
+                  className="ls-artist-ig-link inline-flex items-center gap-1.5"
                   href={`https://instagram.com/${artist.ig.replace('@', '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={e => e.stopPropagation()}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                 >
                   <InstagramIcon size={14} />
                   {artist.ig.startsWith('@') ? artist.ig : `@${artist.ig}`}

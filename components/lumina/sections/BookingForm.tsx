@@ -194,7 +194,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
           <InstagramIcon size={14} />
           @luminasanctum.tattoo
         </a>
-        <div style={{ marginTop: '20px' }}>
+        <div className="mt-5">
           <button type="button" className="lg-f-link" onClick={() => setSubmitError(false)}>
             Intentar de nuevo
           </button>
@@ -271,8 +271,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 </div>
                 <button
                   type="button"
-                  className="ls-btn-primary"
-                  style={{ width: '100%', justifyContent: 'center' }}
+                  className="ls-btn-primary w-full justify-center"
                   onClick={() => {
                     if (form.artist) { clearError('artist'); goToStep(1) }
                     else setErrors(prev => ({ ...prev, artist: 'Selecciona un artista' }))
@@ -312,8 +311,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                     <button
                       key={s}
                       type="button"
-                      className={`ls-artist-btn${form.size === s ? ' active' : ''}`}
-                      style={{ flex: 'none' }}
+                      className={`ls-artist-btn flex-none${form.size === s ? ' active' : ''}`}
                       onClick={() => { set({ size: s }); clearError('size') }}
                     >
                       {s}
@@ -337,7 +335,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 </div>
               ) : (
                 <>
-                  <input ref={zoneInputRef} type="file" accept="image/*" onChange={handleZonePhoto} style={{ display: 'none' }} />
+                  <input ref={zoneInputRef} type="file" accept="image/*" onChange={handleZonePhoto} className="hidden" />
                   <button type="button" className="lg-f-upload lg-f-upload--wide" onClick={() => zoneInputRef.current?.click()}>
                     <ImagePlus size={16} strokeWidth={1.25} />
                     <span>{tr.form.zonePhoto}</span>
@@ -376,8 +374,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 value={form.description}
                 placeholder={tr.form.describePlaceholder}
                 onChange={e => { set({ description: e.target.value }); clearError('description') }}
-                className={errors.description ? 'is-invalid' : undefined}
-                style={{ height: '120px' }}
+                className={`h-[120px]${errors.description ? ' is-invalid' : ''}`}
               />
               <ErrorMsg msg={errors.description} />
             </div>
@@ -402,14 +399,14 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 ))}
                 {refPhotos.length < 4 && (
                   <>
-                    <input ref={refInputRef} type="file" accept="image/*" multiple onChange={handleRefPhotos} style={{ display: 'none' }} />
+                    <input ref={refInputRef} type="file" accept="image/*" multiple onChange={handleRefPhotos} className="hidden" />
                     <button type="button" className="lg-f-upload" aria-label={tr.form.refPhotos} onClick={() => refInputRef.current?.click()}>
                       <ImagePlus size={18} strokeWidth={1.25} />
                     </button>
                   </>
                 )}
               </div>
-              {refPhotos.length === 4 && <p className="lg-f-hint" style={{ marginTop: '10px' }}>{tr.form.maxFiles}</p>}
+              {refPhotos.length === 4 && <p className="lg-f-hint mt-2.5">{tr.form.maxFiles}</p>}
             </div>
 
             <div className="ls-form-group">
@@ -426,7 +423,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                   aria-label={tr.form.date}
                 />
                 <div className={`lg-f-date-face${form.date ? ' has-value' : ''}`}>
-                  <CalendarDays size={15} strokeWidth={1.25} style={{ flexShrink: 0 }} />
+                  <CalendarDays size={15} strokeWidth={1.25} className="shrink-0" />
                   {form.date ? fmtDate(form.date) : tr.form.datePlaceholder}
                 </div>
               </div>
@@ -434,7 +431,7 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
                 {locale === 'es' ? 'Solo disponibles fechas a partir del ' : 'Dates available from '}
                 {fmtDate(minDate)}
               </p>
-              <p className="lg-f-hint" style={{ marginTop: '6px' }}>{tr.form.dateDisclaimer}</p>
+              <p className="lg-f-hint mt-1.5">{tr.form.dateDisclaimer}</p>
             </div>
 
             <div className="lg-f-actions">

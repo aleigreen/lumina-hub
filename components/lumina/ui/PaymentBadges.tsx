@@ -73,7 +73,7 @@ const badges = [
 export default function PaymentBadges({ label }: { label: string }) {
   return (
     <div>
-      <div className="ls-section-label" style={{ marginBottom: '12px' }}>{label}</div>
+      <div className="ls-section-label mb-3">{label}</div>
       <div className="ls-payments">
         {badges.map(({ name, svg }) => (
           <div key={name} className="ls-payment-chip" title={name}>

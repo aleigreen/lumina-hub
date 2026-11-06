@@ -112,6 +112,7 @@ export const t = {
     footer: {
       instagram: 'Instagram',
       book: 'Book now',
+      credit: 'Made with love by',
     },
   },
   es: {
@@ -225,6 +226,7 @@ export const t = {
     footer: {
       instagram: 'Instagram',
       book: 'Agendar cita',
+      credit: 'Hecho con amor por',
     },
   },
 }

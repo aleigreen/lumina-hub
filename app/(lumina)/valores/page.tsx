@@ -1,127 +1,46 @@
 import Link from "next/link"
 import { t } from '../../../components/lumina/data/translations'
 
+const eyebrow = 'font-mono text-[10px] tracking-[0.35em] text-gold uppercase'
+
 export default function ValoresPage() {
+  const { identity } = t.es
+  const cards = [
+    { n: '01', title: identity.missionTitle, body: identity.missionBody },
+    { n: '02', title: identity.visionTitle, body: identity.visionBody },
+  ]
+
   return (
-    <>
-      <style>{`
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #0d0a07; }
+    <div className="min-h-screen bg-ink font-display text-bone">
+      <nav className="flex items-center justify-between border-b border-line/8 px-6 py-5 md:px-16 md:py-6">
+        <Link href="/" className="font-mono text-[11px] tracking-[0.35em] text-gold uppercase no-underline">
+          Lumina Sanctum
+        </Link>
+        <Link
+          href="/"
+          className="flex items-center gap-2 font-mono text-[10px] tracking-[0.25em] text-ash uppercase no-underline transition-[color] duration-200 ease-[ease] hover:text-gold"
+        >
+          ← Volver
+        </Link>
+      </nav>
 
-
-        .vp-wrap {
-          min-height: 100vh;
-          background: #0d0a07;
-          color: #e8dfcf;
-          font-family: var(--f-display), serif;
-          padding: 0;
-        }
-
-        /* Nav */
-        .vp-nav {
-          display: flex; align-items: center; justify-content: space-between;
-          padding: 24px 64px;
-          border-bottom: 1px solid rgba(232,219,196,0.08);
-        }
-        .vp-nav-logo {
-          font-family: var(--f-mono), monospace;
-          font-size: 11px; letter-spacing: 0.35em; color: #c8a872;
-          text-decoration: none; text-transform: uppercase;
-        }
-        .vp-nav-back {
-          font-family: var(--f-mono), monospace;
-          font-size: 10px; letter-spacing: 0.25em; color: #c9bfa9;
-          text-decoration: none; text-transform: uppercase;
-          transition: color 0.2s;
-          display: flex; align-items: center; gap: 8px;
-        }
-        .vp-nav-back:hover { color: #c8a872; }
-
-        /* Hero */
-        .vp-hero {
-          padding: 96px 64px 64px;
-          border-bottom: 1px solid rgba(232,219,196,0.08);
-        }
-        .vp-label {
-          font-family: var(--f-mono), monospace;
-          font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase;
-          color: #c8a872; margin-bottom: 24px;
-        }
-        .vp-title {
-          font-size: clamp(40px, 6vw, 96px);
-          font-weight: 300; line-height: 1.0;
-          color: #e8dfcf;
-        }
-        .vp-title em { font-style: italic; color: #c8a872; }
-
-        /* Grid */
-        .vp-grid {
-          display: grid; grid-template-columns: 1fr 1fr;
-          gap: 2px; background: rgba(232,219,196,0.06);
-          margin: 2px;
-        }
-        .vp-card {
-          padding: 72px 64px;
-          background: #0d0a07;
-          display: flex; flex-direction: column; gap: 32px;
-        }
-        .vp-card:nth-child(2) { background: #15110c; }
-        .vp-card-label {
-          font-family: var(--f-mono), monospace;
-          font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase;
-          color: #c8a872;
-        }
-        .vp-card-title {
-          font-size: clamp(28px, 3vw, 48px);
-          font-weight: 300; font-style: italic;
-          color: #e8dfcf; line-height: 1.1;
-        }
-        .vp-card-body {
-          font-family: var(--f-body), serif; font-size: 20px; color: #c9bfa9;
-          line-height: 1.9; font-weight: 400;
-          max-width: 520px;
-        }
-        .vp-divider {
-          width: 40px; height: 1px;
-          background: rgba(200,168,114,0.3);
-        }
-
-        @media (max-width: 768px) {
-          .vp-nav { padding: 20px 24px; }
-          .vp-hero { padding: 64px 24px 48px; }
-          .vp-grid { grid-template-columns: 1fr; }
-          .vp-card { padding: 48px 24px; }
-        }
-      `}</style>
-
-      <div className="vp-wrap">
-        <nav className="vp-nav">
-          <Link href="/" className="vp-nav-logo">Lumina Sanctum</Link>
-          <Link href="/" className="vp-nav-back">← Volver</Link>
-        </nav>
-
-        <div className="vp-hero">
-          <div className="vp-label">Lumina Sanctum</div>
-          <h1 className="vp-title">
-            Nuestros<br /><em>Valores</em>
-          </h1>
-        </div>
-
-        <div className="vp-grid">
-          <div className="vp-card">
-            <div className="vp-card-label">01 — {t.es.identity.missionTitle}</div>
-            <div className="vp-divider" />
-            <h2 className="vp-card-title">{t.es.identity.missionTitle}</h2>
-            <p className="vp-card-body">{t.es.identity.missionBody}</p>
-          </div>
-          <div className="vp-card">
-            <div className="vp-card-label">02 — {t.es.identity.visionTitle}</div>
-            <div className="vp-divider" />
-            <h2 className="vp-card-title">{t.es.identity.visionTitle}</h2>
-            <p className="vp-card-body">{t.es.identity.visionBody}</p>
-          </div>
-        </div>
+      <div className="border-b border-line/8 px-6 pt-16 pb-12 md:px-16 md:pt-24 md:pb-16">
+        <div className={`mb-6 ${eyebrow}`}>Lumina Sanctum</div>
+        <h1 className="text-[length:clamp(40px,6vw,96px)] leading-none font-light text-bone">
+          Nuestros<br /><em className="text-gold italic">Valores</em>
+        </h1>
       </div>
-    </>
+
+      <div className="m-0.5 grid grid-cols-1 gap-0.5 bg-line/6 md:grid-cols-2">
+        {cards.map(card => (
+          <div key={card.n} className="flex flex-col gap-8 bg-ink px-6 py-12 even:bg-crypt md:px-16 md:py-18">
+            <div className={eyebrow}>{card.n} — {card.title}</div>
+            <div className="h-px w-10 bg-gold/30" />
+            <h2 className="text-[length:clamp(28px,3vw,48px)] leading-[1.1] font-light text-bone italic">{card.title}</h2>
+            <p className="max-w-[520px] font-body text-xl leading-[1.9] font-normal text-ash">{card.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }

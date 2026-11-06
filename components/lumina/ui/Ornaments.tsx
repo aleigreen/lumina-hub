@@ -80,12 +80,21 @@ export function Arch({ className }: { className?: string }) {
 export function Dagger({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 40 400" fill="none" aria-hidden="true" className={className} preserveAspectRatio="xMidYMid meet">
-      <path d="M20 0L23 70L20 400L17 70Z" fill="#c8a872" fillOpacity="0.55" />
-      <path d="M4 112C12 122 16 126 20 132C24 126 28 122 36 112" stroke="#c8a872" strokeOpacity="0.6" strokeWidth="1" />
-      <path d="M8 96L20 104L32 96" stroke="#c8a872" strokeOpacity="0.45" strokeWidth="1" />
-      <path d="M20 40L24 48L20 56L16 48Z" fill="#c8a872" fillOpacity="0.8" />
-      <circle cx="20" cy="150" r="2" fill="#c8a872" fillOpacity="0.7" />
-      <path d="M12 300L20 296L28 300" stroke="#c8a872" strokeOpacity="0.35" strokeWidth="1" />
+      <g stroke="#c8a872" strokeLinecap="round" strokeLinejoin="round">
+        {/* Pomo: destello de cuatro puntas con anillo */}
+        <path d="M20 2C20.6 8.4 21.6 9.4 28 10C21.6 10.6 20.6 11.6 20 18C19.4 11.6 18.4 10.6 12 10C18.4 9.4 19.4 8.4 20 2Z" fill="#c8a872" fillOpacity="0.85" strokeWidth="0" />
+        <circle cx="20" cy="10" r="4.2" strokeOpacity="0.45" strokeWidth="0.7" />
+        {/* Empuñadura con vendaje */}
+        <path d="M18.4 20H21.6V62H18.4Z" fill="#c8a872" fillOpacity="0.12" strokeOpacity="0.7" strokeWidth="0.8" />
+        <path d="M18.4 27L21.6 24M18.4 33L21.6 30M18.4 39L21.6 36M18.4 45L21.6 42M18.4 51L21.6 48M18.4 57L21.6 54" strokeOpacity="0.5" strokeWidth="0.6" />
+        {/* Guarda: brazos curvos que terminan en espiral */}
+        <path d="M20 66C14 66 9 64.5 6.5 61.5C5 59.6 5.6 57.2 7.6 57C9.4 56.9 10 58.8 8.8 59.6" strokeOpacity="0.8" strokeWidth="0.9" />
+        <path d="M20 66C26 66 31 64.5 33.5 61.5C35 59.6 34.4 57.2 32.4 57C30.6 56.9 30 58.8 31.2 59.6" strokeOpacity="0.8" strokeWidth="0.9" />
+        <path d="M20 62L23.5 66L20 70L16.5 66Z" fill="#c8a872" fillOpacity="0.85" strokeWidth="0" />
+        {/* Hoja: contorno fino, relleno tenue y canal central */}
+        <path d="M17 72H23L22.4 330L20 396L17.6 330Z" fill="#c8a872" fillOpacity="0.14" strokeOpacity="0.75" strokeWidth="0.8" />
+        <path d="M20 78V318" strokeOpacity="0.55" strokeWidth="0.6" />
+      </g>
     </svg>
   )
 }

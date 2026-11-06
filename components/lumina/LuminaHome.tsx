@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import './lumina.css'
 import './gothic.css'
 import './editorial.css'
@@ -87,10 +88,10 @@ export default function LuminaHome() {
     }
     const onResize = () => { measure(); onScroll() }
     // La altura del documento cambia al abrir artistas/FAQ: se re-mide sin leer layout en cada scroll.
+    // El ResizeObserver también dispara al empezar a observar, ya con el layout calculado:
+    // así la primera medición no fuerza un reflow durante la carga.
     const ro = new ResizeObserver(onResize)
     ro.observe(root)
-    measure()
-    update()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
     return () => {
@@ -117,7 +118,7 @@ export default function LuminaHome() {
     : ['Permanent art', 'Every piece, a ritual', 'Condesa · CDMX']
 
   return (
-    <main ref={rootRef} className="ls-root" style={{ background: '#0d0a07', color: '#e8dfcf', minHeight: '100vh' }}>
+    <main ref={rootRef} className="ls-root min-h-screen bg-ink text-bone">
 
       <div className="lg-grain" aria-hidden="true" />
 
@@ -130,15 +131,15 @@ export default function LuminaHome() {
           <a href="#faq">{t[locale].nav.faq}</a>
         </div>
         <a href="#" className="ls-nav-logo">
-          <img src="/lumina/icon-wt.png" alt="" width={22} height={36} style={{ height: '36px', width: 'auto' }} />
-          <div className="ls-nav-logo-wordmark ls-nav-logo-wordmark--desktop">
+          <Image src="/lumina/icon-wt.png" alt="Lumina Sanctum" width={17} height={36} loading="eager" className="h-9 w-auto" />
+          <div className="ls-nav-logo-wordmark ls-nav-logo-wordmark--desktop" aria-hidden="true">
             <div className="ls-nav-logo-text">LUMINA</div>
             <div className="ls-nav-logo-sub">SANCTUM</div>
           </div>
         </a>
         <div className="ls-nav-links lg-nav-side lg-nav-side--r">
           <button type="button" className="lg-nav-btn" onClick={() => setValoresOpen(true)}>{t[locale].nav.values}</button>
-          <button type="button" className="lg-nav-lang" onClick={() => setLocale(locale === 'en' ? 'es' : 'en')} aria-label={locale === 'en' ? 'Cambiar a español' : 'Switch to English'}>
+          <button type="button" className="lg-nav-lang" onClick={() => setLocale(locale === 'en' ? 'es' : 'en')} aria-label={locale === 'en' ? 'ES · Cambiar a español' : 'EN · Switch to English'}>
             {locale === 'en' ? 'ES' : 'EN'}
           </button>
           <a href="#book" className="lg-nav-cta">{t[locale].nav.book}</a>
@@ -153,7 +154,7 @@ export default function LuminaHome() {
       </nav>
 
       {menuOpen && (
-        <div onClick={() => setMenuOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 98 }} />
+        <div onClick={() => setMenuOpen(false)} className="fixed inset-0 z-98" />
       )}
       <div className={`ls-mobile-menu ${menuOpen ? 'open' : ''}`}>
         <a href="#studio" onClick={() => setMenuOpen(false)}>{t[locale].nav.studio}</a>
@@ -180,11 +181,11 @@ export default function LuminaHome() {
             <SectionMark n={4} locale={locale} />
             <div className="ls-section-label" data-reveal="fade">{t[locale].booking.label}</div>
             <SectionTitle kicker={t[locale].booking.title} main={t[locale].booking.titleEm} align="left" />
-            <p data-reveal style={{ fontFamily: "var(--f-body), serif", fontSize: '20px', color: '#c9bfa9', lineHeight: 1.8, maxWidth: '380px' }}>
+            <p data-reveal className="max-w-[380px] font-body text-xl leading-[1.8] text-ash">
               {t[locale].booking.body}
             </p>
             <div className="ls-booking-note" data-reveal style={{ '--d': '0.1s' } as React.CSSProperties}>{t[locale].booking.deposit}</div>
-            <div style={{ marginTop: '32px', '--d': '0.2s' } as React.CSSProperties} data-reveal>
+            <div className="mt-8" style={{ '--d': '0.2s' } as React.CSSProperties} data-reveal>
               <PaymentBadges label={t[locale].booking.accept} />
             </div>
           </div>
@@ -210,7 +211,7 @@ export default function LuminaHome() {
         <div className="lg-footer-mark" aria-hidden="true" data-reveal="title">LUMINA</div>
         <div className="ls-footer-top">
           <div className="ls-footer-logo">
-            <img src="/lumina/icon-wt.png" alt="Lumina Sanctum" height={48} width={30} style={{ objectFit: 'contain' }} />
+            <Image src="/lumina/icon-wt.png" alt="Lumina Sanctum" width={22} height={48} className="object-contain" />
             <div>
               <div className="ls-footer-logo-text">Lumina</div>
               <div className="ls-footer-logo-sub">Sanctum</div>
@@ -223,6 +224,11 @@ export default function LuminaHome() {
             <a href="https://instagram.com/luminasanctum.tattoo" target="_blank" rel="noopener noreferrer" className="lg-footer-ig"><InstagramIcon size={13} strokeWidth={1.5} />{t[locale].footer.instagram}</a>
             <a href="#book">{t[locale].footer.book}</a>
           </div>
+        </div>
+        <div className="lg-footer-credit">
+          {t[locale].footer.credit}{' '}
+          <a href="https://holiic.mx/" target="_blank" rel="noopener noreferrer">holiic</a>
+          <span className="lg-footer-heart" aria-hidden="true">♡</span>
         </div>
       </footer>
 

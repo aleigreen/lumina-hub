@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, type CSSProperties } from 'react'
+import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import { t, type Locale } from '../data/translations'
 import { stripArrow } from '../ui/Icons'
@@ -38,9 +39,10 @@ export default function Hero({ locale }: Props) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     let ox = 0, oy = 0
-    let tx = hero.clientWidth / 2, ty = hero.clientHeight * 0.42
-    let x = tx, y = ty
+    let tx = 0, ty = 0
+    let x = 0, y = 0
     let raf = 0
+    let placed = false
 
     const paint = () => { spot.style.transform = `translate3d(${x - SPOT_R}px, ${y - SPOT_R}px, 0)` }
     const tick = () => {
@@ -62,18 +64,27 @@ export default function Hero({ locale }: Props) {
       if (!raf) raf = requestAnimationFrame(tick)
     }
 
-    measure()
-    paint()
+    // Las medidas llegan por ResizeObserver (dispara tras el layout, también al inicio):
+    // leerlas al montar forzaría un reflow durante la carga.
+    const ro = new ResizeObserver(([entry]) => {
+      measure()
+      if (!placed) {
+        placed = true
+        tx = x = entry.contentRect.width / 2
+        ty = y = entry.contentRect.height * 0.42
+        paint()
+      }
+    })
+    ro.observe(hero)
     hero.addEventListener('pointerenter', onEnter)
     hero.addEventListener('pointerleave', onLeave)
     hero.addEventListener('pointermove', onMove, { passive: true })
-    window.addEventListener('resize', measure)
     return () => {
       cancelAnimationFrame(raf)
+      ro.disconnect()
       hero.removeEventListener('pointerenter', onEnter)
       hero.removeEventListener('pointerleave', onLeave)
       hero.removeEventListener('pointermove', onMove)
-      window.removeEventListener('resize', measure)
     }
   }, [])
 
@@ -98,7 +109,8 @@ export default function Hero({ locale }: Props) {
       star.style.opacity = String(0.75 - p * 0.6)
     }
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update) }
-    update()
+    // Primer cálculo en el siguiente frame, no durante el montaje (leer scrollY aquí fuerza reflow).
+    onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
       cancelAnimationFrame(raf)
@@ -144,14 +156,17 @@ export default function Hero({ locale }: Props) {
 
         <div className="lg-hero-emblem">
           <Arch className="lg-hero-arch" />
-          <img
+          {/* Imagen LCP: preload pone el <link> en el <head> con fetchpriority=high y next/image sirve un tamaño acorde (no el PNG de 985 px). */}
+          <Image
             src="/lumina/icon-wt.png"
             alt=""
-            className="lg-hero-icon"
+            className="lg-hero-icon mb-6 h-[clamp(80px,10vw,130px)] w-auto"
+            width={60}
+            height={130}
+            preload
             fetchPriority="high"
-            style={{ height: 'clamp(80px, 10vw, 130px)', width: 'auto', marginBottom: '24px' }}
           />
-          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'stretch', marginBottom: '36px' }}>
+          <div className="mb-9 inline-flex flex-col items-stretch">
             <h1 className="ls-hero-title" aria-label={TITLE}>
               {TITLE.split('').map((ch, i) => (
                 <span key={i} className="lg-letter" aria-hidden="true" style={{ '--i': i } as CSSProperties}>
@@ -171,7 +186,7 @@ export default function Hero({ locale }: Props) {
         </div>
       </div>
 
-      <a href="#studio" className="lg-scroll" aria-label={locale === 'es' ? 'Bajar' : 'Scroll down'}>
+      <a href="#studio" className="lg-scroll">
         <span className="lg-scroll-text">{locale === 'es' ? 'Desliza' : 'Scroll'}</span>
         <span className="lg-scroll-line" />
       </a>

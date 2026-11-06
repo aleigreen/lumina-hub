@@ -25,7 +25,7 @@ export default function ArtistRoster({ locale }: { locale: Locale }) {
           const portrait = portraitOf(a.name)
           const isActive = i === active
           return (
-            <li key={a.name}>
+            <li key={a.name} role="presentation">
               <button
                 type="button"
                 role="tab"
@@ -73,7 +73,11 @@ function StagePanel({ artist, locale }: { artist: ArtistData; locale: Locale }) 
   const igHandle = artist.ig.startsWith('@') ? artist.ig : `@${artist.ig}`
 
   // Mantiene visible la miniatura activa dentro de la tira (sin mover la página).
+  // Al montar no hace nada: la tira ya empieza en la primera miniatura, y medir aquí
+  // forzaría un reflow en cada carga y en cada cambio de artista (el panel se remonta).
+  const stripMounted = useRef(false)
   useEffect(() => {
+    if (!stripMounted.current) { stripMounted.current = true; return }
     const strip = stripRef.current
     const el = strip?.children[current] as HTMLElement | undefined
     if (!strip || !el) return
@@ -100,9 +104,9 @@ function StagePanel({ artist, locale }: { artist: ArtistData; locale: Locale }) 
     <div className="lg-stage-inner">
       <div className="lg-stage-media">
         <div className="lg-stage-frame">
-          <img className="lg-stage-bg" src={slide.src} alt="" aria-hidden="true" decoding="async" />
+          <img className="lg-stage-bg" src={slide.src} alt="" aria-hidden="true" loading="lazy" decoding="async" />
           <button type="button" className="lg-stage-zoom" onClick={() => setZoomed(true)} aria-label={es ? 'Ampliar foto' : 'Enlarge photo'}>
-            <img key={slide.src} className="lg-stage-img" src={slide.src} alt={`${artist.name} · ${current + 1}`} decoding="async" />
+            <img key={slide.src} className="lg-stage-img" src={slide.src} alt={`${artist.name} · ${current + 1}`} loading="lazy" decoding="async" />
             <span className="lg-stage-expand" aria-hidden="true"><Expand size={14} strokeWidth={1.5} /></span>
           </button>
           <div className="lg-slide-frame" aria-hidden="true"><Corners /></div>

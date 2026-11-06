@@ -20,6 +20,7 @@ export default function Studio({ locale }: Props) {
   const tr = t[locale].studio
   const [current, setCurrent] = useState(0)
   const [visible, setVisible] = useState(false)
+  const [near, setNear] = useState(false)
   const [line1, line2] = tr.body.split('\n\n')
   const archRef = useRef<HTMLDivElement>(null)
 
@@ -30,6 +31,28 @@ export default function Studio({ locale }: Props) {
     const el = archRef.current
     if (!el) return
     const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.25 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  // Las fotos se piden solo cuando el arco se acerca a la pantalla. Con loading="lazy"
+  // Chrome las bajaba al cargar (el Estudio está justo bajo el hero) y competían con la LCP.
+  useEffect(() => {
+    const el = archRef.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setNear(true); io.disconnect() }
+    }, { rootMargin: '300px 0px' })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  // Las fotos se piden solo cuando el arco se acerca a la pantalla. Con loading="lazy"
+  // Chrome las bajaba al cargar (el Estudio está justo bajo el hero) y competían con la LCP.
+  useEffect(() => {
+    const el = archRef.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); io.disconnect() } }, { rootMargin: '300px 0px' })
     io.observe(el)
     return () => io.disconnect()
   }, [])
@@ -73,7 +96,7 @@ export default function Studio({ locale }: Props) {
               {SLIDES.map((slide, i) => (
                 <img
                   key={slide.src}
-                  src={slide.src}
+                  src={near ? slide.src : undefined}
                   alt={slide.caption}
                   className={`lg-arch-img${i === current ? ' is-current lg-kb' : ''}`}
                   loading="lazy"

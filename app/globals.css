@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ── Tokens de marca ──────────────────────────────────────────────
+   Fuente única de verdad para colores, fuentes y curvas. Generan utilidades
+   (text-gold, bg-ink, font-display, ease-lumina…) y variables CSS
+   (--color-gold…) que usan los CSS de components/lumina.
+   "static": se emiten siempre, aunque ninguna utilidad las use. */
+@theme static {
+  --color-gold: #c8a872;
+  --color-gold-hi: #e3c48a;
+  --color-bone: #e8dfcf;
+  --color-ash: #c9bfa9;
+  --color-ink: #0d0a07;
+  --color-crypt: #15110c;
+  --color-blood: #7a1d18;
+  --color-blood-hi: #9a2620;
+  /* Tono de las líneas divisorias (rgba(232,219,196,…) en los CSS); se usa con opacidad: border-line/8 */
+  --color-line: #e8dbc4;
+
+  --ease-lumina: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-lumina-io: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* El sitio trata ≤768px como móvil (max-width: 768px en los CSS), así que md: empieza en 769px. */
+  --breakpoint-md: 48.0625rem;
 }
 
+/* Fuentes: las variables --f-* las pone next/font en <html> (app/fonts.ts).
+   "inline" hace que la utilidad use var(--f-*) directamente. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--f-display), serif;
+  --font-body: var(--f-body), serif;
+  --font-caps: var(--f-caps), serif;
+  --font-mono: var(--f-mono), monospace;
+  --font-sans: var(--f-sans), sans-serif;
+  --font-gothic: var(--f-black), serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Base del sitio (el preflight de Tailwind ya hace el reset de box-sizing/margin/padding). */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink);
+  font-family: var(--f-mono), monospace;
 }
