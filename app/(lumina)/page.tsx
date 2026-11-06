@@ -1,5 +1,4 @@
 import LuminaHome from '../../components/lumina/LuminaHome'
-import Script from 'next/script'
 
 export default function Page() {
   const schema = {
@@ -53,10 +52,10 @@ export default function Page() {
 
   return (
     <>
-      <Script
-        id="schema-local-business"
+      <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        // Escapa "<" para que el JSON no pueda cerrar la etiqueta script.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }}
       />
       <LuminaHome />
     </>

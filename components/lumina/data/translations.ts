@@ -118,7 +118,7 @@ export const t = {
     nav: {
       studio: 'El Estudio',
       artists: 'Artistas',
-      book: 'Proyecto',
+      book: 'Agendar cita',
       faq: 'FAQ',
       values: 'Nuestros Valores',
     },
@@ -127,7 +127,7 @@ export const t = {
       subtitle: 'Sanctum',
       location: 'Solo con cita previa',
       cta: 'Empieza tu proyecto →',
-      ctaSecondary: 'Conoce los artistas',
+      ctaSecondary: 'Conoce a los artistas',
     },
     studio: {
       label: 'Condesa · Ciudad de México',
@@ -224,7 +224,7 @@ export const t = {
     },
     footer: {
       instagram: 'Instagram',
-      book: 'Proyecto',
+      book: 'Agendar cita',
     },
   },
 }

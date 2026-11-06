@@ -1,134 +1,103 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, type CSSProperties } from 'react'
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { t, type Locale } from '../data/translations'
+import { ArchOutline, Rays, SectionDecor, SectionMark, SectionTitle, Sparkle, VerticalText } from '../ui/Ornaments'
 
 type Props = { locale: Locale }
 
-// Reemplaza src con tus fotos en WebP, 1200×800px, <150KB cada una
 const SLIDES = [
-  { src: '/lumina/studio/LUMINA-9.png', caption: 'Studio · 01' },
-  { src: '/lumina/studio/LUMINA-71.png', caption: 'Studio · 02' },
-  { src: '/lumina/studio/LUMINA-73.png', caption: 'Studio · 03' },
-  { src: '/lumina/studio/LUMINA-60.png', caption: 'Studio · 04' },
+  { src: '/lumina/studio/LUMINA-9.webp', caption: 'Studio · 01' },
+  { src: '/lumina/studio/LUMINA-71.webp', caption: 'Studio · 02' },
+  { src: '/lumina/studio/LUMINA-73.webp', caption: 'Studio · 03' },
+  { src: '/lumina/studio/LUMINA-60.webp', caption: 'Studio · 04' },
 ]
+
+const pad = (n: number) => String(n).padStart(2, '0')
 
 export default function Studio({ locale }: Props) {
   const tr = t[locale].studio
   const [current, setCurrent] = useState(0)
+  const [visible, setVisible] = useState(false)
   const [line1, line2] = tr.body.split('\n\n')
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const archRef = useRef<HTMLDivElement>(null)
 
-  const goTo = (i: number) => {
-    setCurrent((i + SLIDES.length) % SLIDES.length)
-  }
+  const goTo = (i: number) => setCurrent((i + SLIDES.length) % SLIDES.length)
 
-  // Auto-advance every 4s, pauses on manual interaction
+  // El autoplay solo corre mientras el arco está en pantalla (antes re-renderizaba cada 4 s siempre).
   useEffect(() => {
-    timerRef.current = setTimeout(() => goTo(current + 1), 4000)
-    return () => { if (timerRef.current) clearTimeout(timerRef.current) }
-  }, [current])
+    const el = archRef.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.25 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
 
-  const handleManual = (i: number) => {
-    if (timerRef.current) clearTimeout(timerRef.current)
-    goTo(i)
-  }
+  // Avanza cada 5 s; cualquier cambio manual reinicia la cuenta (porque cambia `current`).
+  useEffect(() => {
+    if (!visible) return
+    const id = setTimeout(() => setCurrent(c => (c + 1) % SLIDES.length), 5000)
+    return () => clearTimeout(id)
+  }, [current, visible])
 
   return (
-    <section className="ls-section" id="studio">
-      <div className="ls-section-label">{tr.label}</div>
-      <h2 className="ls-section-title">{tr.title} <em>{tr.titleEm}</em></h2>
+    <section className="ls-section lg-sec" id="studio" data-anim>
+      <SectionDecor id="studio" glow="right" sparks={[[5, 12, 14, 0.3], [93, 40, 10, 1.5], [52, 6, 9, 2.2]]} />
 
-      <div style={{ marginBottom: '2px' }} className="ls-studio-grid">
+      <div className="lg-studio">
+        {/* ── Texto ── */}
+        <div className="lg-studio-copy">
+          <SectionMark n={1} locale={locale} />
+          <div className="ls-section-label" data-reveal="fade">{tr.label}</div>
+          <SectionTitle kicker={tr.title} main={tr.titleEm} align="left" />
+          <div className="lg-studio-body" data-reveal style={{ '--d': '0.15s' } as CSSProperties}>
+            <p className="lg-studio-lead">{line1}</p>
+            {line2 && <p className="lg-dropcap">{line2}</p>}
+          </div>
+          <a href="#book" className="lg-pill" data-reveal style={{ '--d': '0.3s' } as CSSProperties}>
+            {locale === 'es' ? 'Agenda tu visita' : 'Book your visit'}
+            <ArrowRight size={14} strokeWidth={1.5} />
+          </a>
+        </div>
 
-        {/* Carrusel */}
-        <div className="ls-studio-sub" style={{ position: 'relative', background: '#15110c', overflow: 'hidden' }}>
-          {SLIDES.map((slide, i) => (
-            <div
-              key={i}
-              style={{
-                position: 'absolute', inset: 0,
-                opacity: i === current ? 1 : 0,
-                transition: 'opacity 0.7s ease',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}
-            >
-              {slide.src ? (
+        {/* ── Arco ── */}
+        <figure className="lg-studio-figure" data-reveal="fade" style={{ '--d': '0.1s' } as CSSProperties}>
+          <VerticalText className="lg-studio-vert">Zamora 165 · Condesa · CDMX</VerticalText>
+          <Sparkle size={22} className="lg-arch-spark lg-arch-spark--l lg-twinkle" />
+          <Sparkle size={14} className="lg-arch-spark lg-arch-spark--r lg-twinkle" style={{ '--d': '1.2s' } as CSSProperties} />
+
+          <div className="lg-arch-wrap">
+            <ArchOutline className="lg-arch-outline" />
+            <div className="lg-arch" ref={archRef}>
+              {SLIDES.map((slide, i) => (
                 <img
+                  key={slide.src}
                   src={slide.src}
                   alt={slide.caption}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'sepia(10%) brightness(0.85)' }}
+                  className={`lg-arch-img${i === current ? ' is-current lg-kb' : ''}`}
                   loading="lazy"
                   decoding="async"
                 />
-              ) : (
-                // Placeholder: eliminar cuando tengas fotos
-                <div style={{ width: '100%', height: '100%', background: `hsl(${30 + i * 8}, 15%, ${10 + i * 2}%)`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-                  <div style={{ width: '40px', height: '1px', background: 'rgba(232,219,196,0.15)' }} />
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', letterSpacing: '0.3em', color: 'rgba(232,219,196,0.2)', textTransform: 'uppercase' }}>
-                    {slide.caption}
-                  </span>
-                  <div style={{ width: '40px', height: '1px', background: 'rgba(232,219,196,0.15)' }} />
-                </div>
-              )}
+              ))}
             </div>
-          ))}
-
-          {/* Flechas */}
-          <button
-            onClick={() => handleManual(current - 1)}
-            aria-label="Anterior"
-            style={{
-              position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)',
-              background: 'none', border: 'none', cursor: 'pointer', zIndex: 2,
-              color: 'rgba(232,219,196,0.5)', fontSize: '20px', padding: '8px',
-              transition: 'color 0.2s', fontFamily: 'monospace',
-            }}
-          >‹</button>
-          <button
-            onClick={() => handleManual(current + 1)}
-            aria-label="Siguiente"
-            style={{
-              position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)',
-              background: 'none', border: 'none', cursor: 'pointer', zIndex: 2,
-              color: 'rgba(232,219,196,0.5)', fontSize: '20px', padding: '8px',
-              transition: 'color 0.2s', fontFamily: 'monospace',
-            }}
-          >›</button>
-
-          {/* Puntos */}
-          <div style={{ position: 'absolute', bottom: '16px', left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: '8px', zIndex: 2 }}>
-            {SLIDES.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => handleManual(i)}
-                aria-label={`Foto ${i + 1}`}
-                style={{
-                  width: i === current ? '20px' : '6px', height: '2px',
-                  background: i === current ? '#c8a872' : 'rgba(232,219,196,0.25)',
-                  border: 'none', cursor: 'pointer', padding: 0,
-                  transition: 'all 0.3s ease',
-                }}
-              />
-            ))}
           </div>
 
-          {/* Contador */}
-          <div style={{
-            position: 'absolute', top: '16px', right: '16px', zIndex: 2,
-            fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
-            letterSpacing: '0.2em', color: 'rgba(232,219,196,0.4)',
-          }}>
-            0{current + 1} / 0{SLIDES.length}
-          </div>
-        </div>
+          <Rays className="lg-arch-rays" />
 
-        {/* Texto */}
-        <div className="ls-studio-text">
-          <p>{line1}<br /><br />{line2}</p>
-        </div>
+          <figcaption className="lg-arch-controls">
+            <button type="button" className="lg-round-btn" onClick={() => goTo(current - 1)} aria-label={locale === 'es' ? 'Foto anterior' : 'Previous photo'}>
+              <ChevronLeft size={16} strokeWidth={1.25} />
+            </button>
+            <span className="lg-arch-count" aria-live="polite">
+              <b>{pad(current + 1)}</b> / {pad(SLIDES.length)}
+            </span>
+            <button type="button" className="lg-round-btn" onClick={() => goTo(current + 1)} aria-label={locale === 'es' ? 'Foto siguiente' : 'Next photo'}>
+              <ChevronRight size={16} strokeWidth={1.25} />
+            </button>
+          </figcaption>
+        </figure>
       </div>
-
     </section>
   )
 }

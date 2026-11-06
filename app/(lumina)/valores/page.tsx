@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { t } from '../../../components/lumina/data/translations'
 
 export default function ValoresPage() {
@@ -7,13 +8,12 @@ export default function ValoresPage() {
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #0d0a07; }
 
-        @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap');
 
         .vp-wrap {
           min-height: 100vh;
           background: #0d0a07;
           color: #e8dfcf;
-          font-family: 'Bodoni Moda', serif;
+          font-family: var(--f-display), serif;
           padding: 0;
         }
 
@@ -24,12 +24,12 @@ export default function ValoresPage() {
           border-bottom: 1px solid rgba(232,219,196,0.08);
         }
         .vp-nav-logo {
-          font-family: 'JetBrains Mono', monospace;
+          font-family: var(--f-mono), monospace;
           font-size: 11px; letter-spacing: 0.35em; color: #c8a872;
           text-decoration: none; text-transform: uppercase;
         }
         .vp-nav-back {
-          font-family: 'JetBrains Mono', monospace;
+          font-family: var(--f-mono), monospace;
           font-size: 10px; letter-spacing: 0.25em; color: #c9bfa9;
           text-decoration: none; text-transform: uppercase;
           transition: color 0.2s;
@@ -43,7 +43,7 @@ export default function ValoresPage() {
           border-bottom: 1px solid rgba(232,219,196,0.08);
         }
         .vp-label {
-          font-family: 'JetBrains Mono', monospace;
+          font-family: var(--f-mono), monospace;
           font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase;
           color: #c8a872; margin-bottom: 24px;
         }
@@ -67,7 +67,7 @@ export default function ValoresPage() {
         }
         .vp-card:nth-child(2) { background: #15110c; }
         .vp-card-label {
-          font-family: 'JetBrains Mono', monospace;
+          font-family: var(--f-mono), monospace;
           font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase;
           color: #c8a872;
         }
@@ -77,8 +77,8 @@ export default function ValoresPage() {
           color: #e8dfcf; line-height: 1.1;
         }
         .vp-card-body {
-          font-size: 17px; color: #c9bfa9;
-          line-height: 1.9; font-weight: 300;
+          font-family: var(--f-body), serif; font-size: 20px; color: #c9bfa9;
+          line-height: 1.9; font-weight: 400;
           max-width: 520px;
         }
         .vp-divider {
@@ -96,8 +96,8 @@ export default function ValoresPage() {
 
       <div className="vp-wrap">
         <nav className="vp-nav">
-          <a href="/" className="vp-nav-logo">Lumina Sanctum</a>
-          <a href="/" className="vp-nav-back">← Volver</a>
+          <Link href="/" className="vp-nav-logo">Lumina Sanctum</Link>
+          <Link href="/" className="vp-nav-back">← Volver</Link>
         </nav>
 
         <div className="vp-hero">

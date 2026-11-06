@@ -1,10 +1,13 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import { artists } from '../data/artists'
 import { bodyZones } from '../data/bodyZones'
 import { t, type Locale } from '../data/translations'
 import StepIndicator from '../ui/StepIndicator'
+import { ArrowLeft, ArrowRight, CalendarDays, ImagePlus, LoaderCircle, Send, X } from 'lucide-react'
+import { Corners, Sparkle } from '../ui/Ornaments'
+import { InstagramIcon, stripArrow } from '../ui/Icons'
 
 type FormData = {
   hasArtist: boolean | null
@@ -29,6 +32,17 @@ function getMinDate(): string {
   return d.toISOString().split('T')[0]
 }
 
+/** Miniatura de un archivo local: crea la URL una vez y la libera al desmontar. */
+function Thumb({ file, alt, size }: { file: File; alt: string; size: number }) {
+  const url = useMemo(() => URL.createObjectURL(file), [file])
+  useEffect(() => () => URL.revokeObjectURL(url), [url])
+  return <img src={url} alt={alt} width={size} height={size} className="lg-f-thumb-img" />
+}
+
+function ErrorMsg({ msg }: { msg?: string }) {
+  return msg ? <p className="lg-f-error" role="alert">{msg}</p> : null
+}
+
 export default function BookingForm({ initialArtist = '', locale }: Props) {
   const tr = t[locale]
   const [step, setStep] = useState(0)
@@ -48,25 +62,31 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
   const [zonePhoto, setZonePhoto] = useState<File | null>(null)
   const [errors, setErrors] = useState<{ email?: string; phone?: string; artist?: string; zone?: string; size?: string; description?: string; name?: string }>({})
   const formRef = useRef<HTMLDivElement>(null)
+  const stepsRef = useRef<HTMLDivElement>(null)
   const refInputRef = useRef<HTMLInputElement>(null)
   const zoneInputRef = useRef<HTMLInputElement>(null)
   const dateInputRef = useRef<HTMLInputElement>(null)
 
   const clearError = (field: string) => setErrors(prev => ({ ...prev, [field]: undefined }))
 
+  // Al cambiar de paso solo se desplaza si el indicador de pasos quedó por encima
+  // de la pantalla (y entonces sube hasta él). Nunca empuja la página hacia abajo.
   const goToStep = (n: number) => {
     setStep(n)
-    setTimeout(() => {
-      const el = formRef.current
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const el = stepsRef.current
       if (!el) return
-      const top = el.getBoundingClientRect().top + window.scrollY - 80
-      window.scrollTo({ top, behavior: 'smooth' })
-    }, 50)
+      const { top } = el.getBoundingClientRect()
+      if (top < 90) window.scrollTo({ top: top + window.scrollY - 100, behavior: 'smooth' })
+    }))
   }
 
   const set = (patch: Partial<FormData>) => setForm(prev => ({ ...prev, ...patch }))
   const selectedZone = bodyZones.find(z => z.id === form.zone)
   const minDate = getMinDate()
+  const dateLocale = locale === 'es' ? 'es-MX' : 'en-US'
+  const fmtDate = (iso: string) =>
+    new Date(iso + 'T00:00:00').toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' })
 
   const validateContact = (): boolean => {
     const newErrors: typeof errors = {}
@@ -148,26 +168,20 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
 
   if (submitted) {
     return (
-      <div style={{ padding: '40px 24px', textAlign: 'center' }}>
-        <div style={{ fontSize: '32px', marginBottom: '16px' }}>✦</div>
-        <h3 style={{ fontFamily: "'Bodoni Moda', serif", fontSize: '24px', fontWeight: 300, fontStyle: 'italic', color: '#c8a872', marginBottom: '16px' }}>
-          {tr.success.title}
-        </h3>
-        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: '#c9bfa9', lineHeight: 1.8 }}>
-          {tr.success.body}
-        </p>
+      <div className="lg-f-result">
+        <div className="lg-f-result-star"><Sparkle size={34} /></div>
+        <h3 className="lg-f-result-title">{tr.success.title}</h3>
+        <p className="lg-f-result-body">{tr.success.body}</p>
       </div>
     )
   }
 
   if (submitError) {
     return (
-      <div style={{ padding: '40px 24px', textAlign: 'center' }}>
-        <div style={{ fontSize: '28px', marginBottom: '16px', color: '#c0392b' }}>✕</div>
-        <h3 style={{ fontFamily: "'Bodoni Moda', serif", fontSize: '22px', fontWeight: 300, fontStyle: 'italic', color: '#e8dfcf', marginBottom: '16px' }}>
-          Algo salió mal
-        </h3>
-        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: '#c9bfa9', lineHeight: 1.8, marginBottom: '24px' }}>
+      <div className="lg-f-result">
+        <div className="lg-f-result-star lg-f-result-star--err"><X size={30} strokeWidth={1} /></div>
+        <h3 className="lg-f-result-title">Algo salió mal</h3>
+        <p className="lg-f-result-body">
           Lo sentimos, hubo un problema al enviar tu solicitud.{'\n'}
           Por favor escríbenos directamente por Instagram y con gusto te atendemos.
         </p>
@@ -175,16 +189,13 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
           href="https://instagram.com/luminasanctum.tattoo"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px', border: '1px solid #c8a872', color: '#c8a872', fontFamily: "'Inter', sans-serif", fontSize: '13px', letterSpacing: '0.08em', textDecoration: 'none', transition: 'background 0.2s' }}
+          className="ls-btn-outline"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+          <InstagramIcon size={14} />
           @luminasanctum.tattoo
         </a>
         <div style={{ marginTop: '20px' }}>
-          <button
-            onClick={() => setSubmitError(false)}
-            style={{ background: 'none', border: 'none', color: '#888', fontFamily: "'Inter', sans-serif", fontSize: '12px', cursor: 'pointer', letterSpacing: '0.08em', textDecoration: 'underline' }}
-          >
+          <button type="button" className="lg-f-link" onClick={() => setSubmitError(false)}>
             Intentar de nuevo
           </button>
         </div>
@@ -196,365 +207,311 @@ export default function BookingForm({ initialArtist = '', locale }: Props) {
     <div ref={formRef}>
       {/* Instrucciones antes del form */}
       {step === 0 && (
-        <div style={{ marginBottom: '40px', padding: '28px 32px', background: '#fff', border: '1px solid #e8e8e8' }}>
-          <div style={{ fontSize: '11px', letterSpacing: '0.4em', textTransform: 'uppercase', color: '#888', marginBottom: '14px' }}>
+        <div className="lg-f-intro">
+          <div className="lg-f-intro-frame" aria-hidden="true"><Corners /></div>
+          <div className="lg-f-intro-title">
+            <Sparkle size={10} />
             {tr.formIntro.title}
           </div>
-          <p style={{ fontSize: '14px', color: '#444', lineHeight: 1.8, marginBottom: '20px', letterSpacing: '0.02em' }}>
-            {tr.formIntro.body}
-          </p>
-          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <p className="lg-f-intro-body">{tr.formIntro.body}</p>
+          <ul className="lg-f-intro-list">
             {tr.formIntro.items.map((item, i) => (
-              <li key={i} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-                <span style={{ fontSize: '9px', letterSpacing: '0.2em', color: '#999', paddingTop: '3px', flexShrink: 0 }}>
-                  0{i + 1}
-                </span>
-                <span style={{ fontSize: '14px', color: '#444', lineHeight: 1.7, letterSpacing: '0.02em' }}>{item}</span>
+              <li key={i}>
+                <span className="lg-f-intro-num">{String(i + 1).padStart(2, '0')}</span>
+                <span>{item}</span>
               </li>
             ))}
           </ul>
-          <p style={{ fontSize: '13px', color: '#777', lineHeight: 1.7, fontStyle: 'italic', letterSpacing: '0.02em' }}>
-            {tr.formIntro.note}
-          </p>
+          <p className="lg-f-intro-note">{tr.formIntro.note}</p>
         </div>
       )}
 
-      <StepIndicator steps={tr.steps} current={step} />
+      <div ref={stepsRef}><StepIndicator steps={tr.steps} current={step} /></div>
 
-      {/* Step 0: Artist preference */}
-      {step === 0 && (
-        <div>
-          <div className="ls-section-label" style={{ marginBottom: '20px' }}>{tr.form.hasArtist}</div>
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '32px' }}>
-            <button
-              type="button"
-              className={`ls-artist-btn ${form.hasArtist === true ? 'active' : ''}`}
-              style={{ flex: 1, padding: '16px' }}
-              onClick={() => set({ hasArtist: true })}
-            >
-              {tr.form.yes}
-            </button>
-            <button
-              type="button"
-              className={`ls-artist-btn ${form.hasArtist === false ? 'active' : ''}`}
-              style={{ flex: 1, padding: '16px' }}
-              onClick={() => { set({ hasArtist: false, artist: '' }); goToStep(1) }}
-            >
-              {tr.form.studioDecides}
-            </button>
-          </div>
+      {/* key={step}: cada paso entra con su propia animación */}
+      <div key={step} className="lg-f-step">
 
-          {form.hasArtist === true && (
-            <>
-              <div className="ls-section-label" style={{ marginBottom: '12px' }}>{tr.form.selectArtist}</div>
-              <div className="ls-artist-selector" style={{ marginBottom: '32px' }}>
-                {artists.map(a => (
-                  <button
-                    key={a.name}
-                    type="button"
-                    className={`ls-artist-btn ${form.artist === a.name ? 'active' : ''}`}
-                    onClick={() => set({ artist: a.name })}
-                  >
-                    {a.name}
-                  </button>
-                ))}
-              </div>
+        {/* Paso 0: preferencia de artista */}
+        {step === 0 && (
+          <div>
+            <div className="lg-f-question">{tr.form.hasArtist}</div>
+            <div className="lg-f-choices">
               <button
                 type="button"
-                className="ls-btn-primary"
-                style={{ width: '100%', justifyContent: 'center' }}
-                onClick={() => {
-                  if (form.artist) { clearError('artist'); goToStep(1) }
-                  else setErrors(prev => ({ ...prev, artist: 'Selecciona un artista' }))
-                }}
+                className={`ls-artist-btn lg-choice${form.hasArtist === true ? ' active' : ''}`}
+                onClick={() => set({ hasArtist: true })}
               >
-                {tr.form.continue}
+                <Sparkle size={10} className="lg-choice-star" />
+                {tr.form.yes}
               </button>
-              {errors.artist && <p style={{ fontSize: '12px', color: '#c0392b', marginTop: '8px', letterSpacing: '0.02em' }}>{errors.artist}</p>}
-            </>
-          )}
-        </div>
-      )}
-
-      {/* Step 1: Body zone + size */}
-      {step === 1 && (
-        <div>
-          <div className="ls-section-label" style={{ marginBottom: '16px' }}>{tr.form.placement}</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '8px' }}>
-            {bodyZones.map(zone => (
               <button
-                key={zone.id}
                 type="button"
-                className={`ls-artist-btn ${form.zone === zone.id ? 'active' : ''}`}
-                onClick={() => { set({ zone: zone.id, size: '' }); clearError('zone'); clearError('size') }}
+                className={`ls-artist-btn lg-choice${form.hasArtist === false ? ' active' : ''}`}
+                onClick={() => { set({ hasArtist: false, artist: '' }); goToStep(1) }}
               >
-                {zone.label[locale]}
+                <Sparkle size={10} className="lg-choice-star" />
+                {tr.form.studioDecides}
               </button>
-            ))}
-          </div>
-          {errors.zone && <p style={{ fontSize: '12px', color: '#c0392b', marginBottom: '16px', letterSpacing: '0.02em' }}>{errors.zone}</p>}
-          {!errors.zone && <div style={{ marginBottom: '20px' }} />}
+            </div>
 
-          {selectedZone && (
-            <>
-              <div className="ls-section-label" style={{ marginBottom: '12px' }}>{tr.form.size}</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
-                {selectedZone.sizes.map(s => (
-                  <button
-                    key={s}
-                    type="button"
-                    className={`ls-artist-btn ${form.size === s ? 'active' : ''}`}
-                    style={{ flex: 'none' }}
-                    onClick={() => { set({ size: s }); clearError('size') }}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-              {errors.size && <p style={{ fontSize: '12px', color: '#c0392b', marginBottom: '16px', letterSpacing: '0.02em' }}>{errors.size}</p>}
-            </>
-          )}
-
-          {/* Zone photo upload */}
-          <div style={{ marginBottom: '32px' }}>
-            <div className="ls-section-label" style={{ marginBottom: '8px' }}>{tr.form.zonePhoto}</div>
-            <p style={{ fontSize: '13px', color: '#666', marginBottom: '12px', letterSpacing: '0.02em' }}>{tr.form.zonePhotoHint}</p>
-            {zonePhoto ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <img
-                  src={URL.createObjectURL(zonePhoto)}
-                  alt="zone"
-                  style={{ width: '72px', height: '72px', objectFit: 'cover', border: '1px solid #e8e8e8' }}
-                />
+            {form.hasArtist === true && (
+              <div className="lg-f-reveal">
+                <div className="lg-f-label">{tr.form.selectArtist}</div>
+                <div className="ls-artist-selector">
+                  {artists.map(a => (
+                    <button
+                      key={a.name}
+                      type="button"
+                      className={`ls-artist-btn${form.artist === a.name ? ' active' : ''}`}
+                      onClick={() => { set({ artist: a.name }); clearError('artist') }}
+                    >
+                      {a.name}
+                    </button>
+                  ))}
+                </div>
                 <button
                   type="button"
-                  onClick={() => setZonePhoto(null)}
-                  style={{ fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#aaa', background: 'none', border: 'none', cursor: 'pointer' }}
+                  className="ls-btn-primary"
+                  style={{ width: '100%', justifyContent: 'center' }}
+                  onClick={() => {
+                    if (form.artist) { clearError('artist'); goToStep(1) }
+                    else setErrors(prev => ({ ...prev, artist: 'Selecciona un artista' }))
+                  }}
                 >
-                  {tr.form.removePhoto}
+                  {stripArrow(tr.form.continue)}<ArrowRight size={14} strokeWidth={1.5} />
                 </button>
+                <ErrorMsg msg={errors.artist} />
               </div>
-            ) : (
-              <>
-                <input ref={zoneInputRef} type="file" accept="image/*" onChange={handleZonePhoto} style={{ display: 'none' }} />
-                <button
-                  type="button"
-                  className="ls-btn-outline"
-                  style={{ fontSize: '9px', padding: '10px 24px' }}
-                  onClick={() => zoneInputRef.current?.click()}
-                >
-                  + {tr.form.zonePhoto}
-                </button>
-              </>
             )}
           </div>
+        )}
 
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button type="button" className="ls-btn-outline" onClick={() => goToStep(0)}>{tr.form.back}</button>
-            <button
-              type="button"
-              className="ls-btn-primary"
-              style={{ flex: 1, justifyContent: 'center' }}
-              onClick={() => {
-                const e: typeof errors = {}
-                if (!form.zone) e.zone = 'Selecciona una zona'
-                if (form.zone && !form.size) e.size = 'Selecciona un tamaño'
-                if (Object.keys(e).length) setErrors(prev => ({ ...prev, ...e }))
-                else goToStep(2)
-              }}
-            >
-              {tr.form.continue}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step 2: Description + ref photos + date */}
-      {step === 2 && (
-        <div>
-          <div className="ls-form-group">
-            <label>{tr.form.describe}</label>
-            <textarea
-              required
-              value={form.description}
-              placeholder={tr.form.describePlaceholder}
-              onChange={e => { set({ description: e.target.value }); clearError('description') }}
-              style={{ height: '120px', borderBottomColor: errors.description ? '#c0392b' : undefined }}
-            />
-            {errors.description && <p style={{ fontSize: '12px', color: '#c0392b', marginTop: '6px', letterSpacing: '0.02em' }}>{errors.description}</p>}
-          </div>
-
-          {/* Reference photos */}
-          <div style={{ marginBottom: '28px' }}>
-            <div className="ls-section-label" style={{ marginBottom: '8px' }}>{tr.form.refPhotos}</div>
-            <p style={{ fontSize: '13px', color: '#666', marginBottom: '12px', letterSpacing: '0.02em' }}>{tr.form.refPhotosHint}</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'flex-end' }}>
-              {refPhotos.map((file, i) => (
-                <div key={i} style={{ position: 'relative' }}>
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`ref-${i}`}
-                    style={{ width: '80px', height: '80px', objectFit: 'cover', border: '1px solid #e8e8e8', display: 'block' }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setRefPhotos(prev => prev.filter((_, idx) => idx !== i))}
-                    style={{
-                      position: 'absolute', top: '4px', right: '4px',
-                      background: '#111', color: '#fff', border: 'none',
-                      width: '18px', height: '18px', fontSize: '10px',
-                      cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}
-                  >
-                    ×
-                  </button>
-                </div>
+        {/* Paso 1: zona + tamaño */}
+        {step === 1 && (
+          <div>
+            <div className="lg-f-label">{tr.form.placement}</div>
+            <div className="lg-f-grid">
+              {bodyZones.map(zone => (
+                <button
+                  key={zone.id}
+                  type="button"
+                  className={`ls-artist-btn${form.zone === zone.id ? ' active' : ''}`}
+                  onClick={() => { set({ zone: zone.id, size: '' }); clearError('zone'); clearError('size') }}
+                >
+                  {zone.label[locale]}
+                </button>
               ))}
-              {refPhotos.length < 4 && (
+            </div>
+            <ErrorMsg msg={errors.zone} />
+
+            {selectedZone && (
+              <div className="lg-f-reveal lg-f-block">
+                <div className="lg-f-label">{tr.form.size}</div>
+                <div className="lg-f-wrap">
+                  {selectedZone.sizes.map(s => (
+                    <button
+                      key={s}
+                      type="button"
+                      className={`ls-artist-btn${form.size === s ? ' active' : ''}`}
+                      style={{ flex: 'none' }}
+                      onClick={() => { set({ size: s }); clearError('size') }}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+                <ErrorMsg msg={errors.size} />
+              </div>
+            )}
+
+            {/* Foto de la zona */}
+            <div className="lg-f-block">
+              <div className="lg-f-label">{tr.form.zonePhoto}</div>
+              <p className="lg-f-hint">{tr.form.zonePhotoHint}</p>
+              {zonePhoto ? (
+                <div className="lg-f-thumbs">
+                  <div className="lg-f-thumb">
+                    <Thumb file={zonePhoto} alt="zone" size={88} />
+                    <button type="button" className="lg-f-thumb-x" aria-label={tr.form.removePhoto} onClick={() => setZonePhoto(null)}><X size={12} strokeWidth={1.5} /></button>
+                  </div>
+                </div>
+              ) : (
                 <>
-                  <input
-                    ref={refInputRef}
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleRefPhotos}
-                    style={{ display: 'none' }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => refInputRef.current?.click()}
-                    style={{
-                      width: '80px', height: '80px',
-                      border: '1px dashed #ccc', background: 'none',
-                      cursor: 'pointer', color: '#aaa', fontSize: '22px',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}
-                  >
-                    +
+                  <input ref={zoneInputRef} type="file" accept="image/*" onChange={handleZonePhoto} style={{ display: 'none' }} />
+                  <button type="button" className="lg-f-upload lg-f-upload--wide" onClick={() => zoneInputRef.current?.click()}>
+                    <ImagePlus size={16} strokeWidth={1.25} />
+                    <span>{tr.form.zonePhoto}</span>
                   </button>
                 </>
               )}
             </div>
-            {refPhotos.length === 4 && (
-              <p style={{ fontSize: '12px', color: '#666', marginTop: '8px', letterSpacing: '0.08em' }}>{tr.form.maxFiles}</p>
-            )}
-          </div>
 
-          <div className="ls-form-group">
-            <label>{tr.form.date}</label>
-            <div
-              style={{ position: 'relative', display: 'block', maxWidth: '280px' }}
-              onClick={() => dateInputRef.current?.showPicker?.()}
-            >
-              <input
-                ref={dateInputRef}
-                type="date"
-                value={form.date}
-                min={minDate}
-                onKeyDown={e => e.preventDefault()}
-                onChange={e => set({ date: e.target.value })}
-                style={{
-                  position: 'absolute', inset: 0,
-                  opacity: 0, cursor: 'pointer', zIndex: 2,
-                  width: '100%', height: '100%',
+            <div className="lg-f-actions">
+              <button type="button" className="ls-btn-outline" onClick={() => goToStep(0)}><ArrowLeft size={14} strokeWidth={1.5} />{stripArrow(tr.form.back)}</button>
+              <button
+                type="button"
+                className="ls-btn-primary"
+                onClick={() => {
+                  const e: typeof errors = {}
+                  if (!form.zone) e.zone = 'Selecciona una zona'
+                  if (form.zone && !form.size) e.size = 'Selecciona un tamaño'
+                  if (Object.keys(e).length) setErrors(prev => ({ ...prev, ...e }))
+                  else goToStep(2)
                 }}
+              >
+                {stripArrow(tr.form.continue)}<ArrowRight size={14} strokeWidth={1.5} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 2: descripción + referencias + fecha */}
+        {step === 2 && (
+          <div>
+            <div className="ls-form-group">
+              <label htmlFor="lg-f-desc">{tr.form.describe}</label>
+              <textarea
+                id="lg-f-desc"
+                required
+                value={form.description}
+                placeholder={tr.form.describePlaceholder}
+                onChange={e => { set({ description: e.target.value }); clearError('description') }}
+                className={errors.description ? 'is-invalid' : undefined}
+                style={{ height: '120px' }}
               />
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '10px',
-                borderBottom: '1px solid #ddd', padding: '10px 0',
-                cursor: 'pointer', pointerEvents: 'none',
-                fontSize: '14px', letterSpacing: '0.02em',
-                color: form.date ? '#e8dfcf' : '#888',
-                fontFamily: 'Jost, sans-serif',
-              }}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                  <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
-                </svg>
-                {form.date
-                  ? new Date(form.date + 'T00:00:00').toLocaleDateString(locale === 'es' ? 'es-MX' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' })
-                  : tr.form.datePlaceholder}
+              <ErrorMsg msg={errors.description} />
+            </div>
+
+            {/* Fotos de referencia */}
+            <div className="lg-f-block">
+              <div className="lg-f-label">{tr.form.refPhotos}</div>
+              <p className="lg-f-hint">{tr.form.refPhotosHint}</p>
+              <div className="lg-f-thumbs">
+                {refPhotos.map((file, i) => (
+                  <div key={`${file.name}-${file.lastModified}-${i}`} className="lg-f-thumb">
+                    <Thumb file={file} alt={`ref-${i}`} size={80} />
+                    <button
+                      type="button"
+                      className="lg-f-thumb-x"
+                      aria-label={tr.form.removePhoto}
+                      onClick={() => setRefPhotos(prev => prev.filter((_, idx) => idx !== i))}
+                    >
+                      <X size={12} strokeWidth={1.5} />
+                    </button>
+                  </div>
+                ))}
+                {refPhotos.length < 4 && (
+                  <>
+                    <input ref={refInputRef} type="file" accept="image/*" multiple onChange={handleRefPhotos} style={{ display: 'none' }} />
+                    <button type="button" className="lg-f-upload" aria-label={tr.form.refPhotos} onClick={() => refInputRef.current?.click()}>
+                      <ImagePlus size={18} strokeWidth={1.25} />
+                    </button>
+                  </>
+                )}
+              </div>
+              {refPhotos.length === 4 && <p className="lg-f-hint" style={{ marginTop: '10px' }}>{tr.form.maxFiles}</p>}
+            </div>
+
+            <div className="ls-form-group">
+              <label>{tr.form.date}</label>
+              <div className="lg-f-date" onClick={() => dateInputRef.current?.showPicker?.()}>
+                <input
+                  ref={dateInputRef}
+                  type="date"
+                  value={form.date}
+                  min={minDate}
+                  onKeyDown={e => e.preventDefault()}
+                  onChange={e => set({ date: e.target.value })}
+                  className="lg-f-date-native"
+                  aria-label={tr.form.date}
+                />
+                <div className={`lg-f-date-face${form.date ? ' has-value' : ''}`}>
+                  <CalendarDays size={15} strokeWidth={1.25} style={{ flexShrink: 0 }} />
+                  {form.date ? fmtDate(form.date) : tr.form.datePlaceholder}
+                </div>
+              </div>
+              <p className="lg-f-note">
+                {locale === 'es' ? 'Solo disponibles fechas a partir del ' : 'Dates available from '}
+                {fmtDate(minDate)}
+              </p>
+              <p className="lg-f-hint" style={{ marginTop: '6px' }}>{tr.form.dateDisclaimer}</p>
+            </div>
+
+            <div className="lg-f-actions">
+              <button type="button" className="ls-btn-outline" onClick={() => goToStep(1)}><ArrowLeft size={14} strokeWidth={1.5} />{stripArrow(tr.form.back)}</button>
+              <button
+                type="button"
+                className="ls-btn-primary"
+                onClick={() => {
+                  if (form.description.trim()) { clearError('description'); goToStep(3) }
+                  else setErrors(prev => ({ ...prev, description: 'Describe tu idea' }))
+                }}
+              >
+                {stripArrow(tr.form.continue)}<ArrowRight size={14} strokeWidth={1.5} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 3: contacto + envío */}
+        {step === 3 && (
+          <div>
+            <div className="ls-form-row">
+              <div className="ls-form-group">
+                <label htmlFor="lg-f-name">{tr.form.name}</label>
+                <input
+                  id="lg-f-name"
+                  type="text"
+                  required
+                  autoComplete="name"
+                  value={form.name}
+                  className={errors.name ? 'is-invalid' : undefined}
+                  onChange={e => { set({ name: e.target.value }); clearError('name') }}
+                />
+                <ErrorMsg msg={errors.name} />
+              </div>
+              <div className="ls-form-group">
+                <label htmlFor="lg-f-email">{tr.form.email}</label>
+                <input
+                  id="lg-f-email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  value={form.email}
+                  className={errors.email ? 'is-invalid' : undefined}
+                  onChange={e => { set({ email: e.target.value }); clearError('email') }}
+                />
+                <ErrorMsg msg={errors.email} />
               </div>
             </div>
-            <p style={{ fontSize: '12px', color: '#c8a872', lineHeight: 1.7, marginTop: '10px', letterSpacing: '0.02em' }}>
-              Solo disponibles fechas a partir del {new Date(minDate + 'T00:00:00').toLocaleDateString(locale === 'es' ? 'es-MX' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
-            </p>
-            <p style={{ fontSize: '12px', color: '#888', lineHeight: 1.7, marginTop: '4px', letterSpacing: '0.02em' }}>
-              {tr.form.dateDisclaimer}
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button type="button" className="ls-btn-outline" onClick={() => goToStep(1)}>{tr.form.back}</button>
-            <button
-              type="button"
-              className="ls-btn-primary"
-              style={{ flex: 1, justifyContent: 'center' }}
-              onClick={() => {
-                if (form.description.trim()) { clearError('description'); goToStep(3) }
-                else setErrors(prev => ({ ...prev, description: 'Describe tu idea' }))
-              }}
-            >
-              {tr.form.continue}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step 3: Contact + submit */}
-      {step === 3 && (
-        <div>
-          <div className="ls-form-row">
             <div className="ls-form-group">
-              <label>{tr.form.name}</label>
+              <label htmlFor="lg-f-phone">{tr.form.phone}</label>
               <input
-                type="text"
-                required
-                value={form.name}
-                style={{ borderBottomColor: errors.name ? '#c0392b' : undefined }}
-                onChange={e => { set({ name: e.target.value }); clearError('name') }}
+                id="lg-f-phone"
+                type="tel"
+                autoComplete="tel"
+                value={form.phone}
+                className={errors.phone ? 'is-invalid' : undefined}
+                onChange={e => { set({ phone: e.target.value }); clearError('phone') }}
               />
-              {errors.name && <p style={{ fontSize: '12px', color: '#c0392b', marginTop: '6px', letterSpacing: '0.02em' }}>{errors.name}</p>}
+              <ErrorMsg msg={errors.phone} />
             </div>
-            <div className="ls-form-group">
-              <label>{tr.form.email}</label>
-              <input
-                type="email"
-                required
-                value={form.email}
-                style={{ borderBottomColor: errors.email ? '#c0392b' : undefined }}
-                onChange={e => { set({ email: e.target.value }); setErrors(prev => ({ ...prev, email: undefined })) }}
-              />
-              {errors.email && (
-                <p style={{ fontSize: '11px', color: '#c0392b', marginTop: '6px', letterSpacing: '0.02em' }}>{errors.email}</p>
-              )}
+            <div className="lg-f-actions">
+              <button type="button" className="ls-btn-outline" onClick={() => goToStep(2)}><ArrowLeft size={14} strokeWidth={1.5} />{stripArrow(tr.form.back)}</button>
+              <button
+                type="button"
+                className="ls-btn-primary"
+                disabled={submitting}
+                onClick={() => { if (validateContact()) handleSubmit() }}
+              >
+                {submitting
+                  ? <><LoaderCircle size={14} strokeWidth={1.5} className="lg-spinner" />{locale === 'es' ? 'Enviando…' : 'Sending…'}</>
+                  : <>{stripArrow(tr.form.submit)}<Send size={13} strokeWidth={1.5} /></>}
+              </button>
             </div>
           </div>
-          <div className="ls-form-group">
-            <label>{tr.form.phone}</label>
-            <input
-              type="tel"
-              value={form.phone}
-              style={{ borderBottomColor: errors.phone ? '#c0392b' : undefined }}
-              onChange={e => { set({ phone: e.target.value }); setErrors(prev => ({ ...prev, phone: undefined })) }}
-            />
-            {errors.phone && (
-              <p style={{ fontSize: '11px', color: '#c0392b', marginTop: '6px', letterSpacing: '0.02em' }}>{errors.phone}</p>
-            )}
-          </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button type="button" className="ls-btn-outline" onClick={() => goToStep(2)}>{tr.form.back}</button>
-            <button
-              type="button"
-              className="ls-btn-primary"
-              style={{ flex: 1, justifyContent: 'center' }}
-              disabled={submitting}
-              onClick={() => { if (validateContact()) handleSubmit() }}
-            >
-              {submitting ? 'Enviando...' : tr.form.submit}
-            </button>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
